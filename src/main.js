@@ -1,6 +1,6 @@
 import bg from "../assets/Free/Background/Blue.png";
 import idle from "../assets/Free/personaggi/rosa/dude.png";
-import ground from "../assets/Free/Terrain/ground.png";
+import ground from "../assets/Free/Terrain/grass.png";
 
 var player;
 var cursors;
@@ -36,12 +36,16 @@ import { personaggio } from "./personaggio.js";
 function create() {
   this.bg = this.add.tileSprite(400, 300, 800, 600, "bg");
 
-  //   platforms = this.physics.add.staticGroup();
-  //   platforms.create(400, 568, "ground").setScale(2).refreshBody();
+  platforms = this.physics.add.staticGroup();
+  platforms.create(400, 568, "ground").setScale(2).refreshBody();
 
-  //   platforms.create(600, 400, "ground");
-  //   platforms.create(50, 250, "ground");
-  //   platforms.create(750, 220, "ground");
+  platforms.create(20, 600, "ground");
+
+  // for (let i = 100; i < 200; i += 30) {
+  //   platforms.create(i, 600, "ground");
+  // }
+  platforms.create(50, 250, "ground");
+  platforms.create(750, 220, "ground");
 
   player = this.physics.add.sprite(100, 450, "idle");
 
@@ -69,6 +73,7 @@ function create() {
   });
 
   cursors = this.input.keyboard.createCursorKeys();
+  this.physics.add.collider(player, platforms);
 }
 
 function update() {
