@@ -12,8 +12,11 @@ import spike from "../assets/Free/Traps/Spikes/spike.png";
 import Spikedball from "../assets/Free/Traps/SpikedBall/SpikedBall.png";
 import trampolino from "../assets/Free/Traps/Trampoline/trampolino.png";
 import trampolinoIdle from "../assets/Free/Traps/Trampoline/trampidle.png";
+import apple from "../assets/Free/Items/Fruits/Apple.png";
 var player;
 var cursors;
+var score = 0;
+var scoreText;
 var config = {
   type: Phaser.AUTO,
   width: 800,
@@ -43,6 +46,10 @@ function preload() {
   this.load.image("trampolinoIdle", trampolinoIdle);
   this.load.image("slab", slab);
   this.load.spritesheet("idle", run, {
+    frameWidth: 32,
+    frameHeight: 32,
+  });
+  this.load.spritesheet("apple", apple, {
     frameWidth: 32,
     frameHeight: 32,
   });
@@ -85,6 +92,10 @@ function create() {
   for (let i = 50; i < 850; i += 30) {
     platforms.create(i, 600, "ground");
   }
+  for (let i = 0; i < 150; i += 40) {
+    platforms.create(i, 430, "ground");
+  }
+
   // spike
   spikes = this.physics.add.staticGroup();
   for (let i = 228; i < 380; i += 15) {
@@ -97,6 +108,8 @@ function create() {
 
   spikes.create(510, 377, "spike");
   spikes.create(300, 407, "spike");
+  spikes.create(250, 407, "spike");
+  spikes.create(200, 407, "spike");
   // Spikedball
   spikes.create(455, 520, "Spikedball");
   spikes.create(620, 395, "Spikedball").setScale(0.85).refreshBody();
@@ -110,6 +123,8 @@ function create() {
   platforms.create(200, 560, "block1");
   platforms.create(382, 560, "block1");
   platforms.create(300, 430, "block1");
+  platforms.create(250, 430, "block1");
+  platforms.create(200, 430, "block1");
   platforms.create(520, 560, "block1");
   platforms.create(520, 400, "block1");
 
@@ -148,7 +163,22 @@ function create() {
 
   this.physics.add.collider(player, platforms);
   this.physics.add.collider(player, spikes, hitspike, null, this);
+
   cursors = this.input.keyboard.createCursorKeys();
+  // apple
+  for (let i = 0; i < 10; i++) {
+    this.apple = this.physics.add.sprite(
+      Math.floor(Math.random() * 800) + 20,
+      Math.floor(Math.random() * 500) + 20,
+      "apple"
+    );
+
+    this.physics.add.collider(platforms, this.apple);
+    this.physics.add.overlap(player, this.apple, collect, null, this);
+    this.physics.add.collider(spike, this.apple, removecollect, null, this);
+    this.apple.body.offset.y = -12;
+  }
+
   // fan
 
   this.fan = this.physics.add.staticSprite(600, 567, "fan");
@@ -170,12 +200,20 @@ function create() {
   this.physics.add.collider(platforms, this.Saw);
   this.physics.add.collider(player, this.Saw, hitspike, null, this);
   // this.physics.add.collider(platforms, this.Saw, saww, null, this);
+
+  //score
+  scoreText = this.add.text(16, 16, "Score: 0", {
+    fontSize: "2rem",
+    fill: "#000",
+    fontFamily: "Roboto",
+  });
 }
 
 function update() {
   // Bg move
   this.bg.tilePositionX -= 0.2;
   this.bg.tilePositionY -= 0.1;
+  //saw
   this.Saw.y -= 2.2;
 
   // Player movement
@@ -201,6 +239,7 @@ function update() {
   }
 }
 function hitspike(player, spikes) {
+  score = 0;
   this.scene.restart();
 }
 
@@ -214,4 +253,14 @@ function hittrampolino(player, fan) {
 
   this.fan.play("trampolino", this);
   player.setVelocityY(-400);
+}
+function collect(player, apple) {
+  apple.disableBody(true, true);
+
+  //  Add and update the score
+  score += 10;
+  scoreText.setText("Score: " + score);
+}
+function removecollect(spike, apple) {
+  apple.disableBody(true, true);
 }
