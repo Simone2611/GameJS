@@ -7,7 +7,7 @@ import dead from "../assets/Free/personaggi/dead.png";
 import ground from "../assets/Free/Terrain/grass.png";
 import block1 from "../assets/Free/Terrain/block-1.png";
 import slab from "../assets/Free/Terrain/slab.png";
-import Saw from "../assets/Free/Traps/Saw/sawON.png";
+import Saw from "../assets/Free/Traps/Saw/chainON.png";
 import spike from "../assets/Free/Traps/Spikes/spike.png";
 import Spikedball from "../assets/Free/Traps/SpikedBall/SpikedBall.png";
 import trampolino from "../assets/Free/Traps/Trampoline/trampolino.png";
@@ -63,8 +63,8 @@ function preload() {
     frameHeight: 48,
   });
   this.load.spritesheet("Saw", Saw, {
-    frameWidth: 32,
-    frameHeight: 28,
+    frameWidth: 38,
+    frameHeight: 38,
   });
   this.load.spritesheet("fan", trampolino, {
     frameWidth: 28,
@@ -96,16 +96,20 @@ function create() {
   }
 
   spikes.create(510, 377, "spike");
+  spikes.create(300, 407, "spike");
   // Spikedball
   spikes.create(455, 520, "Spikedball");
   spikes.create(620, 395, "Spikedball").setScale(0.85).refreshBody();
+
   //slab
   platforms.create(700, 450, "slab");
   platforms.create(750, 400, "slab");
   platforms.create(550, 413, "slab");
+  platforms.create(350, 425, "slab");
   //blocchi
   platforms.create(200, 560, "block1");
   platforms.create(382, 560, "block1");
+  platforms.create(300, 430, "block1");
   platforms.create(520, 560, "block1");
   platforms.create(520, 400, "block1");
 
@@ -151,26 +155,28 @@ function create() {
 
   this.physics.add.collider(platforms, this.fan);
   this.physics.add.collider(player, this.fan, hittrampolino, null, this);
-  // Saw (da fixare)
+  // Saw
 
-  //   this.Saw = this.physics.add.sprite(350, 560, "Saw");
-  //   this.anims.create({
-  //     key: "rotate",
-  //     frames: this.anims.generateFrameNumbers("Saw", { start: 0, end: 7 }),
-  //     frameRate: 10,
-  //     repeat: -1,
-  //   });
+  this.Saw = this.physics.add.sprite(300, 560, "Saw");
+  this.anims.create({
+    key: "rotate",
+    frames: this.anims.generateFrameNumbers("Saw", { start: 0, end: 7 }),
+    frameRate: 10,
+    repeat: -1,
+  });
 
-  //   this.Saw.play("rotate", this);
+  this.Saw.play("rotate", this);
 
-  //   this.physics.add.collider(platforms, this.Saw);
-  //   this.physics.add.collider(player, this.Saw);
+  this.physics.add.collider(platforms, this.Saw);
+  this.physics.add.collider(player, this.Saw, hitspike, null, this);
+  // this.physics.add.collider(platforms, this.Saw, saww, null, this);
 }
 
 function update() {
   // Bg move
   this.bg.tilePositionX -= 0.2;
   this.bg.tilePositionY -= 0.1;
+  this.Saw.y -= 2.2;
 
   // Player movement
   if (cursors.left.isDown) {
