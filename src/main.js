@@ -37,15 +37,13 @@ function create() {
   this.bg = this.add.tileSprite(400, 300, 800, 600, "bg");
 
   platforms = this.physics.add.staticGroup();
-  platforms.create(400, 568, "ground").setScale(2).refreshBody();
 
   platforms.create(20, 600, "ground");
 
-  // for (let i = 100; i < 200; i += 30) {
-  //   platforms.create(i, 600, "ground");
-  // }
-  platforms.create(50, 250, "ground");
-  platforms.create(750, 220, "ground");
+  for (let i = 50; i < 850; i += 30) {
+    console.log(i);
+    platforms.create(i, 600, "ground");
+  }
 
   player = this.physics.add.sprite(100, 450, "idle");
 
