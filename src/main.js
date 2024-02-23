@@ -15,6 +15,7 @@ import trampolinoIdle from "../assets/Free/Traps/Trampoline/trampidle.png";
 import apple from "../assets/Free/Items/Fruits/Apple.png";
 var player;
 var cursors;
+var speed = -100;
 var score = 0;
 var scoreText;
 var config = {
@@ -111,8 +112,12 @@ function create() {
   spikes.create(250, 407, "spike");
   spikes.create(200, 407, "spike");
   // Spikedball
-  spikes.create(455, 520, "Spikedball");
-  spikes.create(620, 395, "Spikedball").setScale(0.85).refreshBody();
+  spikes.create(455, 520, "Spikedball").setCircle(15);
+  spikes
+    .create(620, 395, "Spikedball")
+    .setCircle(15)
+    .setScale(0.85)
+    .refreshBody();
 
   //slab
   platforms.create(700, 450, "slab");
@@ -187,7 +192,7 @@ function create() {
   this.physics.add.collider(player, this.fan, hittrampolino, null, this);
   // Saw
 
-  this.Saw = this.physics.add.sprite(300, 560, "Saw");
+  this.Saw = this.physics.add.sprite(300, 550, "Saw").setCircle(16.5);
   this.anims.create({
     key: "rotate",
     frames: this.anims.generateFrameNumbers("Saw", { start: 0, end: 7 }),
@@ -197,7 +202,9 @@ function create() {
 
   this.Saw.play("rotate", this);
 
-  this.physics.add.collider(platforms, this.Saw);
+  this.physics.add.collider(platforms, this.Saw, () => {
+    speed = speed * -1;
+  });
   this.physics.add.collider(player, this.Saw, hitspike, null, this);
   // this.physics.add.collider(platforms, this.Saw, saww, null, this);
 
@@ -214,7 +221,7 @@ function update() {
   this.bg.tilePositionX -= 0.2;
   this.bg.tilePositionY -= 0.1;
   //saw
-  this.Saw.y -= 2.2;
+  this.Saw.setVelocityY(speed);
 
   // Player movement
   if (cursors.left.isDown) {
