@@ -14,7 +14,8 @@ import trampolino from "../assets/Free/Traps/Trampoline/trampolino.png";
 
 import trampolinoIdle from "../assets/Free/Traps/Trampoline/trampidle.png";
 import apple from "../assets/Free/Items/Fruits/Apple.png";
-
+import end from "../assets/Free/Items/Checkpoints/End/End.png";
+import checkpoint from "../assets/Free/Items/Checkpoints/Checkpoint/checkpoint.png";
 var player;
 var cursors;
 var speed = -100;
@@ -50,11 +51,16 @@ var game = new Phaser.Game(config);
 function preload() {
   this.load.image("bg", bg);
   this.load.image("ground", ground);
+  this.load.image("end", end);
   this.load.image("block1", block1);
   this.load.image("spike", spike);
   this.load.image("Spikedball", Spikedball);
   this.load.image("trampolinoIdle", trampolinoIdle);
   this.load.image("slab", slab);
+  this.load.spritesheet("checkpoint", checkpoint, {
+    frameWidth: 64,
+    frameHeight: 64,
+  });
   this.load.spritesheet("idle", run, {
     frameWidth: 32,
     frameHeight: 32,
@@ -121,17 +127,18 @@ function create() {
   spikes.create(250, 407, "spike");
   spikes.create(200, 407, "spike");
 
-  spikes.create(0, 350, "spike");
-  spikes.create(15, 350, "spike");
+  spikes.create(-3, 350, "spike");
+  spikes.create(13, 350, "spike");
 
-  spikes.create(0, 290, "spike");
-  spikes.create(15, 290, "spike");
+  spikes.create(-3, 290, "spike");
+  spikes.create(13, 290, "spike");
 
-  spikes.create(210, 278, "spike");
+  spikes.create(190, 278, "spike");
   spikes.create(460, 290, "spike");
   spikes.create(570, 277, "spike");
-  spikes.create(710, 300, "spike");
+  spikes.create(710, 280, "spike");
   spikes.create(640, 157, "spike");
+  spikes.create(210, 77, "spike");
   // Spikedball
   spikes.create(455, 520, "Spikedball").setCircle(15);
   spikes
@@ -146,6 +153,28 @@ function create() {
     .setCircle(15)
     .setScale(0.85)
     .refreshBody();
+
+  spikes.create(550, 100, "Spikedball").setCircle(15);
+  spikes
+    .create(620, 395, "Spikedball")
+    .setCircle(15)
+    .setScale(0.85)
+    .refreshBody();
+
+  spikes.create(550, 27, "Spikedball").setCircle(15);
+  spikes
+    .create(620, 395, "Spikedball")
+    .setCircle(15)
+    .setScale(0.85)
+    .refreshBody();
+
+  spikes.create(450, 80, "Spikedball").setCircle(15);
+  spikes
+    .create(620, 395, "Spikedball")
+    .setCircle(15)
+    .setScale(0.85)
+    .refreshBody();
+
   //slab
   platforms.create(700, 450, "slab");
   platforms.create(750, 400, "slab");
@@ -155,8 +184,9 @@ function create() {
   platforms.create(10, 300, "slab");
   platforms.create(450, 300, "slab");
   platforms.create(580, 310, "slab");
-  platforms.create(700, 310, "slab");
+  platforms.create(700, 290, "slab");
   platforms.create(800, 200, "slab");
+  platforms.create(0, 100, "slab");
   //blocchi
   platforms.create(200, 560, "block1");
   platforms.create(382, 560, "block1");
@@ -165,11 +195,13 @@ function create() {
   platforms.create(200, 430, "block1");
   platforms.create(520, 560, "block1");
   platforms.create(520, 400, "block1");
-  platforms.create(200, 300, "block1");
+  platforms.create(180, 300, "block1");
   platforms.create(570, 300, "block1");
   platforms.create(650, 180, "block1");
+  platforms.create(280, 100, "block1");
+  platforms.create(200, 100, "block1");
   //player Creation - Animation
-  player = this.physics.add.sprite(430, 200, "idle");
+  player = this.physics.add.sprite(20, 550, "idle");
   player.setSize(15, 27, true);
   player.setCollideWorldBounds(true);
 
@@ -211,11 +243,30 @@ function create() {
   this.apple.create(300, 300, "apple");
   this.apple.create(440, 390, "apple");
   this.apple.create(720, 230, "apple");
-
+  this.apple.create(600, 120, "apple");
+  this.apple.create(500, 120, "apple");
+  this.apple.create(400, 120, "apple");
+  this.apple.create(100, 120, "apple");
   this.physics.add.collider(platforms, this.apple);
   this.physics.add.overlap(player, this.apple, collect, null, this);
-  this.physics.add.collider(spike, this.apple, removecollect, null, this);
 
+  // END
+  this.end = this.physics.add.staticGroup();
+  this.end.create(9, 78, "end").setScale(0.5).setSize(30, 30);
+  this.physics.add.collider(player, this.end, nextlvl, null, this);
+  // Checkpoint
+  this.checkpoint = this.physics.add
+    .staticSprite(20, 391, "checkpoint")
+    .setScale(0.6)
+    .setSize(30, 30);
+  this.anims.create({
+    key: "flag",
+    frames: this.anims.generateFrameNumbers("checkpoint", { start: 0, end: 9 }),
+    frameRate: 10,
+    repeat: -1,
+  });
+
+  this.physics.add.overlap(player, this.checkpoint, checkpointsave, null, this);
   // trampolino
 
   this.trampolino = this.physics.add.staticSprite(600, 567, "tramp");
@@ -243,13 +294,13 @@ function create() {
   scoreText = this.add.text(16, 16, "Score: 0", {
     fontSize: "1.2rem",
     fill: "#000",
-    fontFamily: "Roboto",
+    fontFamily: "Arial",
   });
 
   fps = this.add.text(730, 16, Math.round(game.loop.actualFps) + " FPS", {
     fontSize: "1.2rem",
     fill: "#000",
-    fontFamily: "Roboto",
+    fontFamily: "Arial",
   });
 
   // WASD
@@ -259,6 +310,17 @@ function create() {
   keyW = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
   keySpace = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
   keyEsc = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ESC);
+  if (
+    localStorage.getItem("x") == null ||
+    localStorage.getItem("x") == undefined ||
+    localStorage.getItem("x") == ""
+  ) {
+  } else {
+    const positionX = JSON.parse(localStorage.getItem("x"));
+    const positionY = JSON.parse(localStorage.getItem("y"));
+    player.setX(positionX);
+    player.setY(positionY);
+  }
 }
 
 function update() {
@@ -270,7 +332,7 @@ function update() {
   let controls = localStorage.getItem("gamekey");
   let space = localStorage.getItem("spacebar");
   // Player movement
-
+  this.checkpoint.anims.play("flag", true);
   if (controls == "arrow") {
     if (cursors.left.isDown) {
       player.setVelocityX(-160);
@@ -354,5 +416,12 @@ function removecollect(spike, apple) {
   apple.disableBody(true, true);
 }
 function nextlvl() {
+  localStorage.removeItem("x");
+  localStorage.removeItem("y");
   window.location.href = window.location.origin + "/level1.html";
+}
+
+function checkpointsave() {
+  localStorage.setItem("x", 20);
+  localStorage.setItem("y", 380);
 }
