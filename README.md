@@ -19,3 +19,5 @@
 - Lvl main improved (and harder)
 - Multiple level
 - hitbox fix
+- Keyboard option (W,A,D or arrows)
+- Spacebar option
