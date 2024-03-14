@@ -11,13 +11,22 @@ import Saw from "../assets/Free/Traps/Saw/chainON.png";
 import spike from "../assets/Free/Traps/Spikes/spike.png";
 import Spikedball from "../assets/Free/Traps/SpikedBall/SpikedBall.png";
 import trampolino from "../assets/Free/Traps/Trampoline/trampolino.png";
+
 import trampolinoIdle from "../assets/Free/Traps/Trampoline/trampidle.png";
 import apple from "../assets/Free/Items/Fruits/Apple.png";
+
 var player;
 var cursors;
 var speed = -100;
 var score = 0;
 var scoreText;
+var keyA;
+var keyD;
+var keyW;
+var keyR;
+var keySpace;
+var keyEsc;
+var first = true;
 var config = {
   type: Phaser.AUTO,
   width: 800,
@@ -74,7 +83,7 @@ function preload() {
     frameWidth: 38,
     frameHeight: 38,
   });
-  this.load.spritesheet("fan", trampolino, {
+  this.load.spritesheet("tramp", trampolino, {
     frameWidth: 28,
     frameHeight: 28,
   });
@@ -111,6 +120,18 @@ function create() {
   spikes.create(300, 407, "spike");
   spikes.create(250, 407, "spike");
   spikes.create(200, 407, "spike");
+
+  spikes.create(0, 350, "spike");
+  spikes.create(15, 350, "spike");
+
+  spikes.create(0, 290, "spike");
+  spikes.create(15, 290, "spike");
+
+  spikes.create(210, 278, "spike");
+  spikes.create(460, 290, "spike");
+  spikes.create(570, 277, "spike");
+  spikes.create(710, 300, "spike");
+  spikes.create(640, 157, "spike");
   // Spikedball
   spikes.create(455, 520, "Spikedball").setCircle(15);
   spikes
@@ -119,11 +140,23 @@ function create() {
     .setScale(0.85)
     .refreshBody();
 
+  spikes.create(610, 220, "Spikedball").setCircle(15);
+  spikes
+    .create(620, 395, "Spikedball")
+    .setCircle(15)
+    .setScale(0.85)
+    .refreshBody();
   //slab
   platforms.create(700, 450, "slab");
   platforms.create(750, 400, "slab");
   platforms.create(550, 413, "slab");
   platforms.create(350, 425, "slab");
+  platforms.create(10, 360, "slab");
+  platforms.create(10, 300, "slab");
+  platforms.create(450, 300, "slab");
+  platforms.create(580, 310, "slab");
+  platforms.create(700, 310, "slab");
+  platforms.create(800, 200, "slab");
   //blocchi
   platforms.create(200, 560, "block1");
   platforms.create(382, 560, "block1");
@@ -132,10 +165,12 @@ function create() {
   platforms.create(200, 430, "block1");
   platforms.create(520, 560, "block1");
   platforms.create(520, 400, "block1");
-
+  platforms.create(200, 300, "block1");
+  platforms.create(570, 300, "block1");
+  platforms.create(650, 180, "block1");
   //player Creation - Animation
-  player = this.physics.add.sprite(10, 550, "idle");
-
+  player = this.physics.add.sprite(430, 200, "idle");
+  player.setSize(15, 27, true);
   player.setCollideWorldBounds(true);
 
   this.anims.create({
@@ -171,28 +206,25 @@ function create() {
 
   cursors = this.input.keyboard.createCursorKeys();
   // apple
-  for (let i = 0; i < 10; i++) {
-    this.apple = this.physics.add.sprite(
-      Math.floor(Math.random() * 800) + 20,
-      Math.floor(Math.random() * 500) + 20,
-      "apple"
-    );
 
-    this.physics.add.collider(platforms, this.apple);
-    this.physics.add.overlap(player, this.apple, collect, null, this);
-    this.physics.add.collider(spike, this.apple, removecollect, null, this);
-    this.apple.body.offset.y = -12;
-  }
+  this.apple = this.physics.add.staticGroup();
+  this.apple.create(300, 300, "apple");
+  this.apple.create(440, 390, "apple");
+  this.apple.create(720, 230, "apple");
 
-  // fan
+  this.physics.add.collider(platforms, this.apple);
+  this.physics.add.overlap(player, this.apple, collect, null, this);
+  this.physics.add.collider(spike, this.apple, removecollect, null, this);
 
-  this.fan = this.physics.add.staticSprite(600, 567, "fan");
+  // trampolino
 
-  this.physics.add.collider(platforms, this.fan);
-  this.physics.add.collider(player, this.fan, hittrampolino, null, this);
+  this.trampolino = this.physics.add.staticSprite(600, 567, "tramp");
+  // this.trampolino = this.physics.add.staticSprite(220, 300, "fan2");
+  this.physics.add.collider(platforms, this.trampolino);
+  this.physics.add.collider(player, this.trampolino, hittrampolino, null, this);
   // Saw
 
-  this.Saw = this.physics.add.sprite(300, 550, "Saw").setCircle(16.5);
+  this.Saw = this.physics.add.sprite(300, 550, "Saw").setSize(20, 22);
   this.anims.create({
     key: "rotate",
     frames: this.anims.generateFrameNumbers("Saw", { start: 0, end: 7 }),
@@ -206,14 +238,27 @@ function create() {
     speed = speed * -1;
   });
   this.physics.add.collider(player, this.Saw, hitspike, null, this);
-  // this.physics.add.collider(platforms, this.Saw, saww, null, this);
 
   //score
   scoreText = this.add.text(16, 16, "Score: 0", {
-    fontSize: "2rem",
+    fontSize: "1.2rem",
     fill: "#000",
     fontFamily: "Roboto",
   });
+
+  fps = this.add.text(730, 16, Math.round(game.loop.actualFps) + " FPS", {
+    fontSize: "1.2rem",
+    fill: "#000",
+    fontFamily: "Roboto",
+  });
+
+  // WASD
+  keyA = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
+  keyR = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.R);
+  keyD = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
+  keyW = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
+  keySpace = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
+  keyEsc = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ESC);
 }
 
 function update() {
@@ -222,29 +267,66 @@ function update() {
   this.bg.tilePositionY -= 0.1;
   //saw
   this.Saw.setVelocityY(speed);
-
+  let controls = localStorage.getItem("gamekey");
+  let space = localStorage.getItem("spacebar");
   // Player movement
-  if (cursors.left.isDown) {
-    player.setVelocityX(-160);
 
-    player.anims.play("left", true);
-  } else if (cursors.right.isDown) {
-    player.setVelocityX(160);
+  if (controls == "arrow") {
+    if (cursors.left.isDown) {
+      player.setVelocityX(-160);
 
-    player.anims.play("right", true);
-  } else if (!player.body.touching.down) {
-    player.setVelocityX(0);
+      player.anims.play("left", true);
+    } else if (cursors.right.isDown) {
+      player.setVelocityX(160);
 
-    player.anims.play("fall", true);
-  } else {
-    player.setVelocityX(0);
+      player.anims.play("right", true);
+    } else if (!player.body.touching.down) {
+      player.setVelocityX(0);
 
-    player.anims.play("fermo", true);
+      player.anims.play("fall", true);
+    } else {
+      player.setVelocityX(0);
+
+      player.anims.play("fermo", true);
+    }
+    if (cursors.up.isDown && player.body.touching.down) {
+      player.setVelocityY(-270);
+    }
+  } else if (controls == "wad") {
+    if (keyA.isDown) {
+      player.setVelocityX(-160);
+      player.anims.play("left", true);
+    } else if (keyD.isDown) {
+      player.setVelocityX(160);
+      player.anims.play("right", true);
+    } else if (!player.body.touching.down) {
+      player.setVelocityX(0);
+
+      player.anims.play("fall", true);
+    } else {
+      player.setVelocityX(0);
+
+      player.anims.play("fermo", true);
+    }
+
+    if (keyW.isDown && player.body.touching.down) {
+      player.setVelocityY(-270);
+    }
   }
-  if (cursors.up.isDown && player.body.touching.down) {
-    player.setVelocityY(-270);
+  if (space == "on") {
+    if (keySpace.isDown && player.body.touching.down) {
+      player.setVelocityY(-270);
+    }
   }
+
+  if (keyR.isDown) {
+    score = 0;
+    this.scene.restart();
+  }
+
+  fps.setText(Math.round(game.loop.actualFps) + " FPS");
 }
+
 function hitspike(player, spikes) {
   score = 0;
   this.scene.restart();
@@ -253,12 +335,12 @@ function hitspike(player, spikes) {
 function hittrampolino(player, fan) {
   this.anims.create({
     key: "trampolino",
-    frames: this.anims.generateFrameNumbers("fan", { start: 0, end: 7 }),
+    frames: this.anims.generateFrameNumbers("tramp", { start: 0, end: 7 }),
     frameRate: 10,
     repeat: 0,
   });
 
-  this.fan.play("trampolino", this);
+  this.trampolino.play("trampolino", this);
   player.setVelocityY(-400);
 }
 function collect(player, apple) {
@@ -270,4 +352,7 @@ function collect(player, apple) {
 }
 function removecollect(spike, apple) {
   apple.disableBody(true, true);
+}
+function nextlvl() {
+  window.location.href = window.location.origin + "/level1.html";
 }

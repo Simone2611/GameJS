@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Gioco</title>
+    <link rel="stylesheet" href="css.css" />
+    <script src="//cdn.jsdelivr.net/npm/phaser@3.11.0/dist/phaser.js"></script>
+    <style type="text/css">
+      body {
+        margin: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="options">
+      <button onclick="WAD()">W,A,D Keys</button>
+      <button onclick="arrow()">Arrow Keys</button>
+      <p id="current"></p>
+      <button onclick="space()">SpaceBar</button>
+      <p id="spacebar"></p>
+    </div>
+
+    <script src="src/level1.js" type="module"></script>
+    <script>
+      function WAD() {
+        localStorage.setItem("gamekey", "wad");
+        const current = document.getElementById("current");
+        current.innerText = "Current keys: " + localStorage.getItem("gamekey");
+      }
+      function arrow() {
+        localStorage.setItem("gamekey", "arrow");
+        const current = document.getElementById("current");
+        current.innerText = "Current keys: " + localStorage.getItem("gamekey");
+      }
+      const current = document.getElementById("current");
+      current.innerText = "Current keys: " + localStorage.getItem("gamekey");
+
+      if (localStorage.getItem("gamekey") == null) {
+        localStorage.setItem("gamekey", "arrow");
+      }
+
+      if (localStorage.getItem("spacebar") == null) {
+        localStorage.setItem("spacebar", "on");
+      }
+      function space() {
+        if (localStorage.getItem("spacebar") == "on") {
+          localStorage.setItem("spacebar", "off");
+          const spacebar = document.getElementById("spacebar");
+          spacebar.innerText = "Spacebar: " + localStorage.getItem("spacebar");
+        } else if (localStorage.getItem("spacebar") == "off") {
+          localStorage.setItem("spacebar", "on");
+          const spacebar = document.getElementById("spacebar");
+          spacebar.innerText = "Spacebar: " + localStorage.getItem("spacebar");
+        }
+      }
+      const spacebar = document.getElementById("spacebar");
+      spacebar.innerText = "Spacebar: " + localStorage.getItem("spacebar");
+    </script>
+  </body>
+</html>

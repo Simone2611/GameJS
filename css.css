@@ -2,4 +2,10 @@ canvas {
   display: block;
   margin: auto;
   transform: translateY(7%);
+  border-radius: 10px;
+}
+.options {
+  position: absolute;
+  bottom: 20rem;
+  right: 50%;
 }
