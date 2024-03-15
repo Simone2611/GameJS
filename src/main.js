@@ -1,4 +1,3 @@
-global.p2 = require("p2");
 global.Phaser = require("phaser");
 import bg from "../assets/Free/Background/Blue.png";
 import idle from "../assets/Free/personaggi/rosa/idle.png";
