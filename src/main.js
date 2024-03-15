@@ -26,6 +26,12 @@ var fps;
 if (localStorage.getItem("morti") == null) {
   localStorage.setItem("morti", 0);
 }
+if (localStorage.getItem("y") == null) {
+  localStorage.setItem("y", 550);
+}
+if (localStorage.getItem("x") == null) {
+  localStorage.setItem("x", 20);
+}
 var morti = localStorage.getItem("morti");
 var cursors;
 var speed = -100;
@@ -471,6 +477,9 @@ function nextlvl() {
 }
 
 function checkpointsave() {
-  localStorage.setItem("x", 20);
-  localStorage.setItem("y", 380);
+  if (cheat == "on") {
+  } else {
+    localStorage.setItem("x", 20);
+    localStorage.setItem("y", 380);
+  }
 }
