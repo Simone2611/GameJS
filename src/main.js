@@ -20,6 +20,7 @@ import end from "../assets/Free/Items/Checkpoints/End/End.png";
 import checkpoint from "../assets/Free/Items/Checkpoints/Checkpoint/checkpoint.png";
 var player;
 var platforms;
+var Deaths;
 var cheat = "";
 var spikes;
 var fps;

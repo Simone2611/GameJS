@@ -21,6 +21,7 @@ var speed2 = -50;
 var speed3 = 50;
 var cheat = "";
 var platforms;
+var Deaths;
 if (localStorage.getItem("morti") == null) {
   localStorage.setItem("morti", 0);
 }
