@@ -20,6 +20,7 @@ import checkpoint from "../assets/Free/Items/Checkpoints/Checkpoint/checkpoint.p
 var player;
 var platforms;
 var spikes;
+var fps;
 var cursors;
 var speed = -100;
 var score = 0;
