@@ -1,4 +1,5 @@
 global.Phaser = require("phaser");
+
 import bg from "../assets/Free/Background/Blue.png";
 import idle from "../assets/Free/personaggi/rosa/idle.png";
 import run from "../assets/Free/personaggi/rosa/run.png";
@@ -229,7 +230,7 @@ function create() {
 
   this.anims.create({
     key: "fall",
-    frames: this.anims.generateFrameNumbers("fall", { start: 0, end: 11 }),
+    frames: this.anims.generateFrameNumbers("fall", { start: 0, end: 0 }),
     frameRate: 10,
     repeat: -1,
   });
