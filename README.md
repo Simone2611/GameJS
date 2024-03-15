@@ -40,6 +40,13 @@ idk how to call it so for now is simogame
 - info to how to play
 - progress on lvl 2
 
+  <span style="color: #7F3FE0; ">-v 1.3</span>
+
+- better hitbox
+- death spam console with error bug fixed
+- faster respawn (it does not load everything another time when u die)
+- other fix
+
 ---
 
 - npx parcel index.html level1.html

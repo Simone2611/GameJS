@@ -322,7 +322,7 @@ function create() {
     fill: "#000",
     fontFamily: "Arial",
   });
-  Deaths = this.add.text(630, 16, morti + " Deaths", {
+  Deaths = this.add.text(600, 16, morti + " Deaths", {
     fontSize: "1.2rem",
     fill: "#000",
     fontFamily: "Arial",
@@ -414,17 +414,35 @@ function update() {
     if (localStorage.getItem("y") != null && localStorage.getItem("y") != 380) {
       localStorage.setItem("y", 550);
     }
-    this.scene.restart();
+    localStorage.setItem("morti", morti);
+    if (
+      localStorage.getItem("x-2") == 20 &&
+      localStorage.getItem("y-2") == 380
+    ) {
+      player.setX(20);
+      player.setY(380);
+    } else {
+      player.setX(20);
+      player.setY(550);
+    }
   }
 
   fps.setText(Math.round(game.loop.actualFps) + " FPS");
+  Deaths.setText(morti + " Deaths");
 }
 
 function hitspike(player, spikes) {
   score = 0;
   morti++;
   localStorage.setItem("morti", morti);
-  this.scene.restart();
+  localStorage.setItem("morti", morti);
+  if (localStorage.getItem("x-2") == 20 && localStorage.getItem("y-2") == 380) {
+    player.setX(20);
+    player.setY(380);
+  } else {
+    player.setX(20);
+    player.setY(550);
+  }
 }
 
 function hittrampolino(player, fan) {

@@ -410,17 +410,33 @@ function update() {
     ) {
       localStorage.setItem("y-2", 550);
     }
-    this.scene.restart();
+    if (
+      localStorage.getItem("x-2") == 20 &&
+      localStorage.getItem("y-2") == 380
+    ) {
+      player.setX(20);
+      player.setY(380);
+    } else {
+      player.setX(20);
+      player.setY(550);
+    }
   }
 
   fps.setText(Math.round(game.loop.actualFps) + " FPS");
+  Deaths.setText(morti + " Deaths");
 }
 
 function hitspike(player, spikes) {
   score = 0;
   morti++;
   localStorage.setItem("morti", morti);
-  this.scene.restart();
+  if (localStorage.getItem("x-2") == 20 && localStorage.getItem("y-2") == 380) {
+    player.setX(20);
+    player.setY(380);
+  } else {
+    player.setX(20);
+    player.setY(550);
+  }
 }
 
 function hittrampolino(player, fan) {
