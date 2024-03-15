@@ -49,15 +49,7 @@ var config = {
       debug: false,
     },
   },
-  plugins: {
-    scene: [
-      {
-        key: "DebugBodyColorsPlugin",
-        plugin: Phaser.Plugins.DebugBodyColorsPlugin,
-        mapping: "debugBodyColors",
-      },
-    ],
-  },
+
   scene: {
     preload: preload,
     create: create,
@@ -118,6 +110,8 @@ function preload() {
 function create() {
   // cheat check
   if (localStorage.getItem("hitbox") == 1) {
+    Phaser.Physics.Arcade.StaticBody.prototype.drawDebug =
+      Phaser.Physics.Arcade.Body.prototype.drawDebug;
     this.physics.world.createDebugGraphic(true);
     cheat = "on";
   } else {
@@ -165,12 +159,19 @@ function create() {
   spikes.create(400, 470, "spike");
   // Spikedball
   spikes.create(55, 520, "Spikedball").setCircle(15).refreshBody();
+
   spikes.create(600, 500, "Spikedball").setCircle(12);
+
   spikes.create(500, 480, "Spikedball").setCircle(12);
+
   spikes.create(215, 520, "Spikedball").setCircle(10).refreshBody();
+
   spikes.create(160, 480, "Spikedball").setCircle(10).refreshBody();
+
   spikes.create(180, 390, "Spikedball").setCircle(10).refreshBody();
+
   spikes.create(210, 330, "Spikedball").setCircle(10).refreshBody();
+
   spikes.create(30, 330, "Spikedball").setCircle(10).refreshBody();
 
   //slab
@@ -308,7 +309,7 @@ function create() {
     fontFamily: "Arial",
   });
 
-  Deaths = this.add.text(630, 16, morti + " Deaths", {
+  Deaths = this.add.text(600, 16, morti + " Deaths", {
     fontSize: "1.2rem",
     fill: "#000",
     fontFamily: "Arial",

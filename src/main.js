@@ -14,7 +14,6 @@ import spike from "../assets/Free/Traps/Spikes/spike.png";
 import Spikedball from "../assets/Free/Traps/SpikedBall/SpikedBall.png";
 import trampolino from "../assets/Free/Traps/Trampoline/trampolino.png";
 import trampolinoIdle from "../assets/Free/Traps/Trampoline/trampidle.png";
-
 import apple from "../assets/Free/Items/Fruits/Apple.png";
 import end from "../assets/Free/Items/Checkpoints/End/End.png";
 import checkpoint from "../assets/Free/Items/Checkpoints/Checkpoint/checkpoint.png";
@@ -110,6 +109,8 @@ function preload() {
 function create() {
   //cheat check
   if (localStorage.getItem("hitbox") == 1) {
+    Phaser.Physics.Arcade.StaticBody.prototype.drawDebug =
+      Phaser.Physics.Arcade.Body.prototype.drawDebug;
     this.physics.world.createDebugGraphic(true);
     cheat = "on";
   } else {
