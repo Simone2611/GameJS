@@ -19,6 +19,7 @@ import end from "../assets/Free/Items/Checkpoints/End/End.png";
 import checkpoint from "../assets/Free/Items/Checkpoints/Checkpoint/checkpoint.png";
 var player;
 var platforms;
+var spikes;
 var cursors;
 var speed = -100;
 var score = 0;
