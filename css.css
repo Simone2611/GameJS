@@ -5,7 +5,5 @@ canvas {
   border-radius: 10px;
 }
 .options {
-  position: absolute;
-  bottom: 5rem;
-  right: 40%;
+  margin-top: 5rem;
 }
