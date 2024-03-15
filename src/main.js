@@ -1,3 +1,4 @@
+global.Phaser = require("phaser");
 import bg from "../assets/Free/Background/Blue.png";
 import idle from "../assets/Free/personaggi/rosa/idle.png";
 import run from "../assets/Free/personaggi/rosa/run.png";
@@ -11,12 +12,12 @@ import Saw from "../assets/Free/Traps/Saw/chainON.png";
 import spike from "../assets/Free/Traps/Spikes/spike.png";
 import Spikedball from "../assets/Free/Traps/SpikedBall/SpikedBall.png";
 import trampolino from "../assets/Free/Traps/Trampoline/trampolino.png";
-
 import trampolinoIdle from "../assets/Free/Traps/Trampoline/trampidle.png";
 import apple from "../assets/Free/Items/Fruits/Apple.png";
 import end from "../assets/Free/Items/Checkpoints/End/End.png";
 import checkpoint from "../assets/Free/Items/Checkpoints/Checkpoint/checkpoint.png";
 var player;
+var platforms;
 var cursors;
 var speed = -100;
 var score = 0;
@@ -60,6 +61,7 @@ function preload() {
     frameWidth: 64,
     frameHeight: 64,
   });
+
   this.load.spritesheet("idle", run, {
     frameWidth: 32,
     frameHeight: 32,
