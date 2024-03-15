@@ -188,6 +188,16 @@ function create() {
   this.strawberry.create(400, 550, "strawberry");
   this.strawberry.create(750, 500, "strawberry");
   this.strawberry.create(200, 450, "strawberry");
+  this.time.addEvent({
+    delay: 3000,
+    callback: () => {
+      this.strawberry.create(200, 550, "strawberry");
+      this.strawberry.create(400, 550, "strawberry");
+      this.strawberry.create(750, 500, "strawberry");
+      this.strawberry.create(200, 450, "strawberry");
+    },
+    loop: true,
+  });
   this.physics.add.collider(platforms, this.strawberry);
   this.physics.add.overlap(player, this.strawberry, collect, null, this);
 

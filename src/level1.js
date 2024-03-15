@@ -27,7 +27,6 @@ var keyW;
 var keyR;
 var keySpace;
 var keyEsc;
-var first = true;
 var config = {
   type: Phaser.AUTO,
   width: 800,
@@ -129,8 +128,8 @@ function create() {
   spikes.create(500, 480, "Spikedball").setCircle(12);
   spikes.create(215, 520, "Spikedball").setCircle(10);
   spikes.create(160, 480, "Spikedball").setCircle(10);
-  spikes.create(180, 440, "Spikedball").setCircle(10);
-  spikes.create(210, 380, "Spikedball").setCircle(10);
+  spikes.create(180, 390, "Spikedball").setCircle(10);
+  spikes.create(210, 330, "Spikedball").setCircle(10);
 
   //slab
   platforms.create(600, 500, "slab");
@@ -177,12 +176,22 @@ function create() {
 
   cursors = this.input.keyboard.createCursorKeys();
   // strawberry
-
   this.strawberry = this.physics.add.staticGroup();
   this.strawberry.create(200, 550, "strawberry");
   this.strawberry.create(400, 550, "strawberry");
   this.strawberry.create(750, 500, "strawberry");
-  this.strawberry.create(200, 450, "strawberry");
+  this.strawberry.create(200, 400, "strawberry");
+  this.time.addEvent({
+    delay: 3000,
+    callback: () => {
+      this.strawberry.create(200, 550, "strawberry");
+      this.strawberry.create(400, 550, "strawberry");
+      this.strawberry.create(750, 500, "strawberry");
+      this.strawberry.create(200, 400, "strawberry");
+    },
+    loop: true,
+  });
+
   this.physics.add.collider(platforms, this.strawberry);
   this.physics.add.overlap(player, this.strawberry, collect, null, this);
 
@@ -344,8 +353,8 @@ function collect(player, strawberry) {
   strawberry.disableBody(true, true);
 
   //  Add and update the score
-  score += 10;
-  scoreText.setText("Score: " + score);
+  // score += 10;
+  // scoreText.setText("Score: " + score);
 }
 function removecollect(spike, strawberry) {
   strawberry.disableBody(true, true);

@@ -27,7 +27,6 @@ var keyW;
 var keyR;
 var keySpace;
 var keyEsc;
-var first = true;
 var config = {
   type: Phaser.AUTO,
   width: 800,
@@ -247,6 +246,19 @@ function create() {
   this.apple.create(500, 120, "apple");
   this.apple.create(400, 120, "apple");
   this.apple.create(100, 120, "apple");
+  this.time.addEvent({
+    delay: 3000,
+    callback: () => {
+      this.apple.create(300, 300, "apple");
+      this.apple.create(440, 390, "apple");
+      this.apple.create(720, 230, "apple");
+      this.apple.create(600, 120, "apple");
+      this.apple.create(500, 120, "apple");
+      this.apple.create(400, 120, "apple");
+      this.apple.create(100, 120, "apple");
+    },
+    loop: true,
+  });
   this.physics.add.collider(platforms, this.apple);
   this.physics.add.overlap(player, this.apple, collect, null, this);
 
