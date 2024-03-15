@@ -371,7 +371,7 @@ function update() {
     if (cursors.up.isDown && player.body.touching.down) {
       player.setVelocityY(-270);
     }
-  } else if (controls == "wad") {
+  } else {
     if (keyA.isDown) {
       player.setVelocityX(-160);
       player.anims.play("left", true);
