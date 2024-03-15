@@ -119,13 +119,13 @@ function create() {
     cheat = "off";
   }
   if (
-    localStorage.getItem("x-2") != null ||
+    localStorage.getItem("x-2") != null &&
     localStorage.getItem("x-2") != 20
   ) {
     localStorage.setItem("x-2", 20);
   }
   if (
-    localStorage.getItem("y-2") != null ||
+    localStorage.getItem("y-2") != null &&
     localStorage.getItem("y-2") != 380
   ) {
     localStorage.setItem("y-2", 550);
@@ -400,13 +400,13 @@ function update() {
   if (keyR.isDown) {
     score = 0;
     if (
-      localStorage.getItem("x-2") != null ||
+      localStorage.getItem("x-2") != null &&
       localStorage.getItem("x-2") != 20
     ) {
       localStorage.setItem("x-2", 20);
     }
     if (
-      localStorage.getItem("y-2") != null ||
+      localStorage.getItem("y-2") != null &&
       localStorage.getItem("y-2") != 380
     ) {
       localStorage.setItem("y-2", 550);

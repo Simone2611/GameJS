@@ -116,10 +116,10 @@ function create() {
   } else {
     cheat = "off";
   }
-  if (localStorage.getItem("x") != null || localStorage.getItem("x") != 20) {
+  if (localStorage.getItem("x") != null && localStorage.getItem("x") != 20) {
     localStorage.setItem("x", 20);
   }
-  if (localStorage.getItem("y") != null || localStorage.getItem("y") != 380) {
+  if (localStorage.getItem("y") != null && localStorage.getItem("y") != 380) {
     localStorage.setItem("y", 550);
   }
   // Background
@@ -408,10 +408,10 @@ function update() {
 
   if (keyR.isDown) {
     score = 0;
-    if (localStorage.getItem("x") != null || localStorage.getItem("x") != 20) {
+    if (localStorage.getItem("x") != null && localStorage.getItem("x") != 20) {
       localStorage.setItem("x", 20);
     }
-    if (localStorage.getItem("y") != null || localStorage.getItem("y") != 380) {
+    if (localStorage.getItem("y") != null && localStorage.getItem("y") != 380) {
       localStorage.setItem("y", 550);
     }
     localStorage.setItem("morti", morti);
