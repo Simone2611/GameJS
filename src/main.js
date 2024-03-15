@@ -14,13 +14,19 @@ import spike from "../assets/Free/Traps/Spikes/spike.png";
 import Spikedball from "../assets/Free/Traps/SpikedBall/SpikedBall.png";
 import trampolino from "../assets/Free/Traps/Trampoline/trampolino.png";
 import trampolinoIdle from "../assets/Free/Traps/Trampoline/trampidle.png";
+
 import apple from "../assets/Free/Items/Fruits/Apple.png";
 import end from "../assets/Free/Items/Checkpoints/End/End.png";
 import checkpoint from "../assets/Free/Items/Checkpoints/Checkpoint/checkpoint.png";
 var player;
 var platforms;
+var cheat = "";
 var spikes;
 var fps;
+if (localStorage.getItem("morti") == null) {
+  localStorage.setItem("morti", 0);
+}
+var morti = localStorage.getItem("morti");
 var cursors;
 var speed = -100;
 var score = 0;
@@ -42,6 +48,7 @@ var config = {
       debug: false,
     },
   },
+
   scene: {
     preload: preload,
     create: create,
@@ -100,6 +107,19 @@ function preload() {
 }
 
 function create() {
+  //cheat check
+  if (localStorage.getItem("hitbox") == 1) {
+    this.physics.world.createDebugGraphic(true);
+    cheat = "on";
+  } else {
+    cheat = "off";
+  }
+  if (localStorage.getItem("x") != null && localStorage.getItem("x") != 20) {
+    localStorage.setItem("x", 20);
+  }
+  if (localStorage.getItem("y") != null && localStorage.getItem("y") != 380) {
+    localStorage.setItem("y", 550);
+  }
   // Background
 
   this.bg = this.add.tileSprite(400, 300, 800, 600, "bg");
@@ -144,35 +164,15 @@ function create() {
   spikes.create(640, 157, "spike");
   spikes.create(210, 77, "spike");
   // Spikedball
-  spikes.create(455, 520, "Spikedball").setCircle(15);
-  spikes
-    .create(620, 395, "Spikedball")
-    .setCircle(15)
-    .setScale(0.85)
-    .refreshBody();
+  spikes.create(455, 520, "Spikedball").setCircle(15).refreshBody();
 
-  spikes.create(610, 210, "Spikedball").setCircle(15);
-  spikes
-    .create(620, 395, "Spikedball")
-    .setCircle(15)
-    .setScale(0.85)
-    .refreshBody();
+  spikes.create(610, 210, "Spikedball").setCircle(15).refreshBody();
 
-  spikes.create(550, 100, "Spikedball").setCircle(15);
-  spikes
-    .create(620, 395, "Spikedball")
-    .setCircle(15)
-    .setScale(0.85)
-    .refreshBody();
+  spikes.create(550, 100, "Spikedball").setCircle(15).refreshBody();
 
-  spikes.create(550, 27, "Spikedball").setCircle(15);
-  spikes
-    .create(620, 395, "Spikedball")
-    .setCircle(15)
-    .setScale(0.85)
-    .refreshBody();
+  spikes.create(550, 27, "Spikedball").setCircle(15).refreshBody();
 
-  spikes.create(450, 80, "Spikedball").setCircle(15);
+  spikes.create(450, 80, "Spikedball").setCircle(15).refreshBody();
   spikes
     .create(620, 395, "Spikedball")
     .setCircle(15)
@@ -269,13 +269,14 @@ function create() {
 
   // END
   this.end = this.physics.add.staticGroup();
-  this.end.create(9, 78, "end").setScale(0.5).setSize(30, 30);
-  this.physics.add.collider(player, this.end, nextlvl, null, this);
+  this.end.create(9, 78, "end").setScale(0.5).refreshBody().setSize(20, 30);
+  this.physics.add.overlap(player, this.end, nextlvl, null, this);
   // Checkpoint
   this.checkpoint = this.physics.add
     .staticSprite(20, 391, "checkpoint")
     .setScale(0.6)
-    .setSize(30, 30);
+    .refreshBody()
+    .setSize(20, 20);
   this.anims.create({
     key: "flag",
     frames: this.anims.generateFrameNumbers("checkpoint", { start: 0, end: 9 }),
@@ -315,6 +316,11 @@ function create() {
   });
 
   fps = this.add.text(730, 16, Math.round(game.loop.actualFps) + " FPS", {
+    fontSize: "1.2rem",
+    fill: "#000",
+    fontFamily: "Arial",
+  });
+  Deaths = this.add.text(630, 16, morti + " Deaths", {
     fontSize: "1.2rem",
     fill: "#000",
     fontFamily: "Arial",
@@ -400,6 +406,12 @@ function update() {
 
   if (keyR.isDown) {
     score = 0;
+    if (localStorage.getItem("x") != null && localStorage.getItem("x") != 20) {
+      localStorage.setItem("x", 20);
+    }
+    if (localStorage.getItem("y") != null && localStorage.getItem("y") != 380) {
+      localStorage.setItem("y", 550);
+    }
     this.scene.restart();
   }
 
@@ -408,6 +420,8 @@ function update() {
 
 function hitspike(player, spikes) {
   score = 0;
+  morti++;
+  localStorage.setItem("morti", morti);
   this.scene.restart();
 }
 
@@ -433,9 +447,10 @@ function removecollect(spike, apple) {
   apple.disableBody(true, true);
 }
 function nextlvl() {
-  localStorage.removeItem("x");
-  localStorage.removeItem("y");
-  window.location.href = window.location.origin + "/level1.html";
+  if (cheat == "on") {
+  } else {
+    window.location.href = window.location.origin + "/level1.html";
+  }
 }
 
 function checkpointsave() {

@@ -11,13 +11,20 @@ import Saw from "../assets/Free/Traps/Saw/chainON.png";
 import spike from "../assets/Free/Traps/Spikes/spike.png";
 import Spikedball from "../assets/Free/Traps/SpikedBall/SpikedBall.png";
 import trampolino from "../assets/Free/Traps/Trampoline/trampolino.png";
-
+import hitbox from "../assets/hitbox.png";
 import trampolinoIdle from "../assets/Free/Traps/Trampoline/trampidle.png";
 import strawberry from "../assets/Free/Items/Fruits/Strawberry.png";
 import end from "../assets/Free/Items/Checkpoints/End/End.png";
 import checkpoint from "../assets/Free/Items/Checkpoints/Checkpoint/checkpoint.png";
 var player;
+var speed2 = -50;
+var speed3 = 50;
+var cheat = "";
 var platforms;
+if (localStorage.getItem("morti") == null) {
+  localStorage.setItem("morti", 0);
+}
+var morti = localStorage.getItem("morti");
 var spikes;
 var fps;
 var cursors;
@@ -41,6 +48,15 @@ var config = {
       debug: false,
     },
   },
+  plugins: {
+    scene: [
+      {
+        key: "DebugBodyColorsPlugin",
+        plugin: Phaser.Plugins.DebugBodyColorsPlugin,
+        mapping: "debugBodyColors",
+      },
+    ],
+  },
   scene: {
     preload: preload,
     create: create,
@@ -52,6 +68,7 @@ var game = new Phaser.Game(config);
 
 function preload() {
   this.load.image("bg", bg);
+  this.load.image("hitbox", hitbox);
   this.load.image("ground", ground);
   this.load.image("end", end);
   this.load.image("block2", block2);
@@ -98,6 +115,25 @@ function preload() {
 }
 
 function create() {
+  // cheat check
+  if (localStorage.getItem("hitbox") == 1) {
+    this.physics.world.createDebugGraphic(true);
+    cheat = "on";
+  } else {
+    cheat = "off";
+  }
+  if (
+    localStorage.getItem("x-2") != null &&
+    localStorage.getItem("x-2") != 20
+  ) {
+    localStorage.setItem("x-2", 20);
+  }
+  if (
+    localStorage.getItem("y-2") != null &&
+    localStorage.getItem("y-2") != 380
+  ) {
+    localStorage.setItem("y-2", 550);
+  }
   // Background
 
   this.bg = this.add.tileSprite(400, 300, 800, 600, "bg");
@@ -127,18 +163,21 @@ function create() {
 
   spikes.create(400, 470, "spike");
   // Spikedball
+  spikes.create(55, 520, "Spikedball").setCircle(15).refreshBody();
   spikes.create(600, 500, "Spikedball").setCircle(12);
   spikes.create(500, 480, "Spikedball").setCircle(12);
-  spikes.create(215, 520, "Spikedball").setCircle(10);
-  spikes.create(160, 480, "Spikedball").setCircle(10);
-  spikes.create(180, 390, "Spikedball").setCircle(10);
-  spikes.create(210, 330, "Spikedball").setCircle(10);
+  spikes.create(215, 520, "Spikedball").setCircle(10).refreshBody();
+  spikes.create(160, 480, "Spikedball").setCircle(10).refreshBody();
+  spikes.create(180, 390, "Spikedball").setCircle(10).refreshBody();
+  spikes.create(210, 330, "Spikedball").setCircle(10).refreshBody();
+  spikes.create(30, 330, "Spikedball").setCircle(10).refreshBody();
 
   //slab
   platforms.create(600, 500, "slab");
   platforms.create(700, 500, "slab");
   platforms.create(500, 480, "slab");
   platforms.create(400, 480, "slab");
+
   //blocchi
   platforms.create(300, 450, "block2");
   //player Creation - Animation
@@ -178,12 +217,28 @@ function create() {
   this.physics.add.collider(player, spikes, hitspike, null, this);
 
   cursors = this.input.keyboard.createCursorKeys();
+  //move
+  this.hitbox = this.physics.add.staticGroup();
+
+  this.hitbox.create(70, 300, "hitbox").setVisible(false);
+  this.hitbox.create(510, 300, "hitbox").setVisible(false);
+
+  this.spike = this.physics.add.image(300, 300, "Spikedball").setCircle(13, 1);
+  this.spike2 = this.physics.add.image(420, 300, "Spikedball").setCircle(13, 1);
+  this.physics.add.collider(this.hitbox, this.spike, () => {
+    speed2 = speed2 * -1;
+  });
+  this.physics.add.collider(this.hitbox, this.spike2, () => {
+    speed3 = speed3 * -1;
+  });
+  this.physics.add.collider(player, this.spike, hitspike, null, this);
   // strawberry
   this.strawberry = this.physics.add.staticGroup();
   this.strawberry.create(200, 550, "strawberry");
   this.strawberry.create(400, 550, "strawberry");
   this.strawberry.create(750, 500, "strawberry");
   this.strawberry.create(200, 400, "strawberry");
+  this.strawberry.create(60, 330, "strawberry");
   this.time.addEvent({
     delay: 3000,
     callback: () => {
@@ -191,22 +246,23 @@ function create() {
       this.strawberry.create(400, 550, "strawberry");
       this.strawberry.create(750, 500, "strawberry");
       this.strawberry.create(200, 400, "strawberry");
+      this.strawberry.create(60, 330, "strawberry");
     },
     loop: true,
   });
 
   this.physics.add.collider(platforms, this.strawberry);
   this.physics.add.overlap(player, this.strawberry, collect, null, this);
-
   // END
   this.end = this.physics.add.staticGroup();
-  this.end.create(9, 78, "end").setScale(0.5).setSize(30, 30);
-  this.physics.add.collider(player, this.end, nextlvl, null, this);
+  this.end.create(9, 78, "end").setScale(0.5).refreshBody().setSize(20, 30);
+  this.physics.add.overlap(player, this.end, nextlvl, null, this);
   // Checkpoint
   this.checkpoint = this.physics.add
     .staticSprite(20, 391, "checkpoint")
     .setScale(0.6)
-    .setSize(30, 30);
+    .refreshBody()
+    .setSize(30, 20);
   this.anims.create({
     key: "flag",
     frames: this.anims.generateFrameNumbers("checkpoint", { start: 0, end: 9 }),
@@ -251,6 +307,12 @@ function create() {
     fontFamily: "Arial",
   });
 
+  Deaths = this.add.text(630, 16, morti + " Deaths", {
+    fontSize: "1.2rem",
+    fill: "#000",
+    fontFamily: "Arial",
+  });
+
   // WASD
   keyA = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
   keyR = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.R);
@@ -275,6 +337,10 @@ function update() {
   // Bg move
   this.bg.tilePositionX -= 0.6;
   //saw
+  this.spike.setVelocityX(speed2);
+  this.spike.setVelocityY(-10);
+  this.spike2.setVelocityX(speed3);
+  this.spike2.setVelocityY(-10);
   this.Saw.setVelocityY(speed);
   let controls = localStorage.getItem("gamekey");
   let space = localStorage.getItem("spacebar");
@@ -330,6 +396,18 @@ function update() {
 
   if (keyR.isDown) {
     score = 0;
+    if (
+      localStorage.getItem("x-2") != null &&
+      localStorage.getItem("x-2") != 20
+    ) {
+      localStorage.setItem("x-2", 20);
+    }
+    if (
+      localStorage.getItem("y-2") != null &&
+      localStorage.getItem("y-2") != 380
+    ) {
+      localStorage.setItem("y-2", 550);
+    }
     this.scene.restart();
   }
 
@@ -338,6 +416,8 @@ function update() {
 
 function hitspike(player, spikes) {
   score = 0;
+  morti++;
+  localStorage.setItem("morti", morti);
   this.scene.restart();
 }
 
@@ -363,7 +443,10 @@ function removecollect(spike, strawberry) {
   strawberry.disableBody(true, true);
 }
 function nextlvl() {
-  window.location.href = window.location.origin + "/level1.html";
+  if (cheat == "on") {
+  } else {
+    window.location.href = window.location.origin + "/level1.html";
+  }
 }
 
 function checkpointsave() {

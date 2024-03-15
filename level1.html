@@ -18,11 +18,31 @@
       <p id="current"></p>
       <button id="space">SpaceBar</button>
       <p id="spacebar"></p>
+      <p>
+        Far vedere le hitbox ti farà tornare al checkpoint e non potrai
+        completare il livello
+      </p>
+      <button id="hitbox">Show Hitbox</button>
+      <p>How to play</p>
+      <p>Move: arrow keys or A,D</p>
+      <p>Jump: Up arrow, w or spacebar if you enable it</p>
+      <p>R = Replay from last Checkpoint</p>
+      <p>Flag = Checkpoint</p>
     </div>
 
     <script src="src/level1.js" type="module"></script>
 
     <script>
+      const hitbox = document.getElementById("hitbox");
+      hitbox.addEventListener("click", (e) => {
+        if (localStorage.getItem("hitbox") == 1) {
+          localStorage.setItem("hitbox", "0");
+          location.reload();
+        } else {
+          localStorage.setItem("hitbox", "1");
+          location.reload();
+        }
+      });
       const wad = document.getElementById("WAD");
       wad.addEventListener("click", (e) => {
         localStorage.setItem("gamekey", "wad");

@@ -1,6 +1,8 @@
 # Work in progress
 
-## npx parcel index.html
+idk how to call it so for now is simogame
+
+### https://simogame.vercel.app/
 
 # Updates
 
@@ -28,3 +30,18 @@
 - New texture
 - Fix
 - Checkpoint
+
+  <span style="color: #7F3FE0; ">-v 1.2</span>
+
+- bugfix
+- vercel server
+- Show hitbox
+- Anticheat (not really anticheat but it work)
+- info to how to play
+- progress on lvl 2
+
+---
+
+- npx parcel index.html level1.html
+
+---
