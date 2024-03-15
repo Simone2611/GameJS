@@ -7,3 +7,6 @@ canvas {
 .options {
   margin-top: 5rem;
 }
+#game {
+  height: 665px;
+}
