@@ -1,4 +1,3 @@
-require("main.js");
 require("level1.js");
 require("level2.js");
 global.p2 = require("p2");
