@@ -13,7 +13,7 @@
   </head>
   <body>
     <div class="options">
-      <button onclick="WAD()">W,A,D Keys</button>
+      <button id="WAD">W,A,D Keys</button>
       <button onclick="arrow()">Arrow Keys</button>
       <p id="current"></p>
       <button onclick="space()">SpaceBar</button>
@@ -23,6 +23,12 @@
     <script src="src/main.js" type="module"></script>
 
     <script>
+      const wad = document.getElementById("WAD");
+      wad.addEventListener("click", (e) => {
+        localStorage.setItem("gamekey", "wad");
+        const current = document.getElementById("current");
+        current.innerText = "Current keys: " + localStorage.getItem("gamekey");
+      });
       function WAD() {
         localStorage.setItem("gamekey", "wad");
         const current = document.getElementById("current");
@@ -37,7 +43,7 @@
       current.innerText = "Current keys: " + localStorage.getItem("gamekey");
 
       if (localStorage.getItem("gamekey") == null) {
-        localStorage.setItem("gamekey", "arrow");
+        localStorage.setItem("gamekey", "WAD");
       }
 
       if (localStorage.getItem("spacebar") == null) {
