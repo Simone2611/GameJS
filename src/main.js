@@ -361,6 +361,7 @@ function update() {
   this.bg.tilePositionY -= 0.1;
   //saw
   this.Saw.setVelocityY(speed);
+  this.Saw.setX(300);
   let controls = localStorage.getItem("gamekey");
   let space = localStorage.getItem("spacebar");
   // Player movement

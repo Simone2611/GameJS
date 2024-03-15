@@ -352,6 +352,7 @@ function update() {
   this.spike2.setVelocityX(speed3);
   this.spike2.setVelocityY(-10);
   this.Saw.setVelocityY(speed);
+  this.Saw.setX(300);
   let controls = localStorage.getItem("gamekey");
   let space = localStorage.getItem("spacebar");
   // Player movement
