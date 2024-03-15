@@ -148,7 +148,7 @@ function create() {
     .setScale(0.85)
     .refreshBody();
 
-  spikes.create(610, 220, "Spikedball").setCircle(15);
+  spikes.create(610, 210, "Spikedball").setCircle(15);
   spikes
     .create(620, 395, "Spikedball")
     .setCircle(15)
