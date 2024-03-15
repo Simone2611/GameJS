@@ -21,6 +21,7 @@
 - hitbox fix
 - Keyboard option (W,A,D or arrows)
 - Spacebar option
+
   <span style="color: #7F3FE0; ">-v 1.1</span>
 
 - New level
