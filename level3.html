@@ -24,7 +24,7 @@
         completare il livello
       </p>
       <button id="hitbox">Show Hitbox</button>
-      <button id="skip">Skip tutorial</button>
+
       <p>How to play</p>
       <p>Move: arrow keys or A,D</p>
       <p>Jump: Up arrow, w or spacebar if you enable it</p>
@@ -32,7 +32,7 @@
       <p>Flag = Checkpoint</p>
     </div>
 
-    <script src="src/main.js" type="module"></script>
+    <script src="src/level3.js" type="module"></script>
 
     <script>
       const hitbox = document.getElementById("hitbox");
@@ -45,9 +45,7 @@
           location.reload();
         }
       });
-      skip.addEventListener("click", (e) => {
-        window.location.href = window.location.origin + "/level1.html";
-      });
+
       const wad = document.getElementById("WAD");
       wad.addEventListener("click", (e) => {
         localStorage.setItem("gamekey", "wad");

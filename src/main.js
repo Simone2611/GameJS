@@ -1,38 +1,43 @@
-global.Phaser = require("phaser");
-
-import bg from "../assets/Free/Background/Blue.png";
-import idle from "../assets/Free/personaggi/rosa/idle.png";
-import run from "../assets/Free/personaggi/rosa/run.png";
-import runl from "../assets/Free/personaggi/rosa/runleft.png";
-import fall from "../assets/Free/personaggi/rosa/fall.png";
+import bg from "../assets/Free/Background/green.png";
+import idle from "../assets/Free/personaggi/frog/idle.png";
+import run from "../assets/Free/personaggi/frog/run.png";
+import runl from "../assets/Free/personaggi/frog/runleft.png";
+import fall from "../assets/Free/personaggi/frog/fall.png";
 import dead from "../assets/Free/personaggi/dead.png";
 import ground from "../assets/Free/Terrain/grass.png";
-import block1 from "../assets/Free/Terrain/block-1.png";
+import block2 from "../assets/Free/Terrain/block-1.png";
 import slab from "../assets/Free/Terrain/slab.png";
 import Saw from "../assets/Free/Traps/Saw/chainON.png";
 import spike from "../assets/Free/Traps/Spikes/spike.png";
 import Spikedball from "../assets/Free/Traps/SpikedBall/SpikedBall.png";
 import trampolino from "../assets/Free/Traps/Trampoline/trampolino.png";
+import hitbox from "../assets/hitbox.png";
 import trampolinoIdle from "../assets/Free/Traps/Trampoline/trampidle.png";
-import apple from "../assets/Free/Items/Fruits/Apple.png";
+import cherries from "../assets/Free/Items/Fruits/cherries.png";
 import end from "../assets/Free/Items/Checkpoints/End/End.png";
 import checkpoint from "../assets/Free/Items/Checkpoints/Checkpoint/checkpoint.png";
+var tutorial1;
+var tutorial2;
+var tutorial3;
 var player;
+var speed2 = -50;
+var speed3 = 50;
+var cheat = "";
 var platforms;
 var Deaths;
-var cheat = "";
-var spikes;
-var fps;
 if (localStorage.getItem("morti") == null) {
   localStorage.setItem("morti", 0);
 }
-if (localStorage.getItem("y") == null) {
-  localStorage.setItem("y", 550);
+if (localStorage.getItem("tuto-y") == null) {
+  localStorage.setItem("tuto-y", 550);
 }
-if (localStorage.getItem("x") == null) {
-  localStorage.setItem("x", 20);
+if (localStorage.getItem("tuto-x") == null) {
+  localStorage.setItem("tuto-x", 20);
 }
+
 var morti = localStorage.getItem("morti");
+var spikes;
+var fps;
 var cursors;
 var speed = -100;
 var score = 0;
@@ -67,9 +72,10 @@ var game = new Phaser.Game(config);
 
 function preload() {
   this.load.image("bg", bg);
+  this.load.image("hitbox", hitbox);
   this.load.image("ground", ground);
   this.load.image("end", end);
-  this.load.image("block1", block1);
+  this.load.image("block2", block2);
   this.load.image("spike", spike);
   this.load.image("Spikedball", Spikedball);
   this.load.image("trampolinoIdle", trampolinoIdle);
@@ -78,12 +84,11 @@ function preload() {
     frameWidth: 64,
     frameHeight: 64,
   });
-
   this.load.spritesheet("idle", run, {
     frameWidth: 32,
     frameHeight: 32,
   });
-  this.load.spritesheet("apple", apple, {
+  this.load.spritesheet("cherries", cherries, {
     frameWidth: 32,
     frameHeight: 32,
   });
@@ -114,7 +119,7 @@ function preload() {
 }
 
 function create() {
-  //cheat check
+  // cheat check
   if (localStorage.getItem("hitbox") == 1) {
     Phaser.Physics.Arcade.StaticBody.prototype.drawDebug =
       Phaser.Physics.Arcade.Body.prototype.drawDebug;
@@ -123,11 +128,17 @@ function create() {
   } else {
     cheat = "off";
   }
-  if (localStorage.getItem("x") != null && localStorage.getItem("x") != 20) {
-    localStorage.setItem("x", 20);
+  if (
+    localStorage.getItem("tuto-x") != null &&
+    localStorage.getItem("tuto-x") != 20
+  ) {
+    localStorage.setItem("tuto-x", 20);
   }
-  if (localStorage.getItem("y") != null && localStorage.getItem("y") != 380) {
-    localStorage.setItem("y", 550);
+  if (
+    localStorage.getItem("tuto-y") != null &&
+    localStorage.getItem("tuto-y") != 380
+  ) {
+    localStorage.setItem("tuto-y", 550);
   }
   // Background
 
@@ -147,72 +158,20 @@ function create() {
 
   // spike
   spikes = this.physics.add.staticGroup();
-  for (let i = 228; i < 380; i += 15) {
-    spikes.create(i, 577, "spike");
-  }
 
-  for (let i = 400; i < 530; i += 15) {
-    spikes.create(i, 577, "spike");
-  }
-
-  spikes.create(510, 377, "spike");
-  spikes.create(300, 407, "spike");
-  spikes.create(250, 407, "spike");
-  spikes.create(200, 407, "spike");
-
-  spikes.create(-3, 350, "spike");
-  spikes.create(13, 350, "spike");
-
-  spikes.create(-3, 290, "spike");
-  spikes.create(13, 290, "spike");
-
-  spikes.create(190, 278, "spike");
-  spikes.create(460, 290, "spike");
-  spikes.create(570, 277, "spike");
-  spikes.create(710, 280, "spike");
-  spikes.create(640, 157, "spike");
-  spikes.create(210, 77, "spike");
+  spikes.create(400, 577, "spike");
+  spikes.create(416, 577, "spike");
   // Spikedball
-  spikes.create(455, 520, "Spikedball").setCircle(15).refreshBody();
-
-  spikes.create(610, 210, "Spikedball").setCircle(15).refreshBody();
-
-  spikes.create(550, 100, "Spikedball").setCircle(15).refreshBody();
-
-  spikes.create(550, 27, "Spikedball").setCircle(15).refreshBody();
-
-  spikes.create(450, 80, "Spikedball").setCircle(15).refreshBody();
-  spikes
-    .create(620, 395, "Spikedball")
-    .setCircle(15)
-    .setScale(0.85)
-    .refreshBody();
+  spikes.create(650, 520, "Spikedball").setCircle(15).refreshBody();
 
   //slab
-  platforms.create(700, 450, "slab");
-  platforms.create(750, 400, "slab");
-  platforms.create(550, 413, "slab");
-  platforms.create(350, 425, "slab");
-  platforms.create(10, 360, "slab");
-  platforms.create(10, 300, "slab");
-  platforms.create(450, 300, "slab");
-  platforms.create(580, 310, "slab");
-  platforms.create(700, 290, "slab");
-  platforms.create(800, 200, "slab");
-  platforms.create(0, 100, "slab");
+  platforms.create(649, 500, "slab");
+  platforms.create(500, 480, "slab");
+  platforms.create(400, 440, "slab");
+  platforms.create(380, 340, "slab");
   //blocchi
-  platforms.create(200, 560, "block1");
-  platforms.create(382, 560, "block1");
-  platforms.create(300, 430, "block1");
-  platforms.create(250, 430, "block1");
-  platforms.create(200, 430, "block1");
-  platforms.create(520, 560, "block1");
-  platforms.create(520, 400, "block1");
-  platforms.create(180, 300, "block1");
-  platforms.create(570, 300, "block1");
-  platforms.create(650, 180, "block1");
-  platforms.create(280, 100, "block1");
-  platforms.create(200, 100, "block1");
+  platforms.create(300, 560, "block2");
+  platforms.create(300, 520, "block2");
   //player Creation - Animation
   player = this.physics.add.sprite(20, 550, "idle");
   player.setSize(15, 27, true);
@@ -241,7 +200,7 @@ function create() {
 
   this.anims.create({
     key: "fall",
-    frames: this.anims.generateFrameNumbers("fall", { start: 0, end: 0 }),
+    frames: this.anims.generateFrameNumbers("fall", { start: 0, end: 11 }),
     frameRate: 10,
     repeat: -1,
   });
@@ -250,42 +209,32 @@ function create() {
   this.physics.add.collider(player, spikes, hitspike, null, this);
 
   cursors = this.input.keyboard.createCursorKeys();
-  // apple
 
-  this.apple = this.physics.add.staticGroup();
-  this.apple.create(300, 300, "apple");
-  this.apple.create(440, 390, "apple");
-  this.apple.create(720, 230, "apple");
-  this.apple.create(600, 120, "apple");
-  this.apple.create(500, 120, "apple");
-  this.apple.create(400, 120, "apple");
-  this.apple.create(100, 120, "apple");
+  // cherries
+  this.cherries = this.physics.add.staticGroup();
+  this.cherries.create(200, 550, "cherries");
+  this.cherries.create(260, 380, "cherries");
   this.time.addEvent({
     delay: 3000,
     callback: () => {
-      this.apple.create(300, 300, "apple");
-      this.apple.create(440, 390, "apple");
-      this.apple.create(720, 230, "apple");
-      this.apple.create(600, 120, "apple");
-      this.apple.create(500, 120, "apple");
-      this.apple.create(400, 120, "apple");
-      this.apple.create(100, 120, "apple");
+      this.cherries.create(200, 550, "cherries");
+      this.cherries.create(260, 380, "cherries");
     },
     loop: true,
   });
-  this.physics.add.collider(platforms, this.apple);
-  this.physics.add.overlap(player, this.apple, collect, null, this);
 
+  this.physics.add.collider(platforms, this.cherries);
+  this.physics.add.overlap(player, this.cherries, collect, null, this);
   // END
   this.end = this.physics.add.staticGroup();
-  this.end.create(9, 78, "end").setScale(0.5).refreshBody().setSize(20, 30);
+  this.end.create(380, 318, "end").setScale(0.5).refreshBody().setSize(20, 30);
   this.physics.add.overlap(player, this.end, nextlvl, null, this);
   // Checkpoint
   this.checkpoint = this.physics.add
     .staticSprite(20, 391, "checkpoint")
     .setScale(0.6)
     .refreshBody()
-    .setSize(20, 20);
+    .setSize(30, 20);
   this.anims.create({
     key: "flag",
     frames: this.anims.generateFrameNumbers("checkpoint", { start: 0, end: 9 }),
@@ -296,45 +245,47 @@ function create() {
   this.physics.add.overlap(player, this.checkpoint, checkpointsave, null, this);
   // trampolino
 
-  this.trampolino = this.physics.add.staticSprite(600, 567, "tramp");
+  this.trampolino = this.physics.add.staticSprite(750, 567, "tramp");
   // this.trampolino = this.physics.add.staticSprite(220, 300, "fan2");
   this.physics.add.collider(platforms, this.trampolino);
   this.physics.add.collider(player, this.trampolino, hittrampolino, null, this);
-  // Saw
-
-  this.Saw = this.physics.add.sprite(300, 550, "Saw").setSize(20, 22);
-  this.anims.create({
-    key: "rotate",
-    frames: this.anims.generateFrameNumbers("Saw", { start: 0, end: 7 }),
-    frameRate: 10,
-    repeat: -1,
-  });
-
-  this.Saw.play("rotate", this);
-
-  this.physics.add.collider(platforms, this.Saw, () => {
-    speed = speed * -1;
-  });
-  this.physics.add.collider(player, this.Saw, hitspike, null, this);
 
   //score
-  scoreText = this.add.text(16, 16, "Score: 0", {
+
+  fps = this.add.text(20, 16, Math.round(game.loop.actualFps) + " FPS", {
     fontSize: "1.2rem",
     fill: "#000",
     fontFamily: "Arial",
   });
 
-  fps = this.add.text(730, 16, Math.round(game.loop.actualFps) + " FPS", {
-    fontSize: "1.2rem",
-    fill: "#000",
-    fontFamily: "Arial",
-  });
-  Deaths = this.add.text(600, 16, morti + " Deaths", {
+  Deaths = this.add.text(680, 16, morti + " Deaths", {
     fontSize: "1.2rem",
     fill: "#000",
     fontFamily: "Arial",
   });
 
+  tutorial1 = this.add.text(140, 500, "You can jump on fruits", {
+    fontSize: "0.8rem",
+    fill: "#000",
+    fontFamily: "Arial",
+  });
+
+  tutorial2 = this.add.text(610, 540, "The trampoline will boost you up", {
+    fontSize: "0.8rem",
+    fill: "#000",
+    fontFamily: "Arial",
+  });
+
+  tutorial3 = this.add.text(10, 360, "Checkpoint", {
+    fontSize: "0.8rem",
+    fill: "#000",
+    fontFamily: "Arial",
+  });
+  tutorial4 = this.add.text(350, 290, "Next level", {
+    fontSize: "0.8rem",
+    fill: "#000",
+    fontFamily: "Arial",
+  });
   // WASD
   keyA = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
   keyR = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.R);
@@ -343,13 +294,13 @@ function create() {
   keySpace = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
   keyEsc = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ESC);
   if (
-    localStorage.getItem("x") == null ||
-    localStorage.getItem("x") == undefined ||
-    localStorage.getItem("x") == ""
+    localStorage.getItem("tuto-x") == null ||
+    localStorage.getItem("tuto-x") == undefined ||
+    localStorage.getItem("tuto-x") == ""
   ) {
   } else {
-    const positionX = JSON.parse(localStorage.getItem("x"));
-    const positionY = JSON.parse(localStorage.getItem("y"));
+    const positionX = JSON.parse(localStorage.getItem("tuto-x"));
+    const positionY = JSON.parse(localStorage.getItem("tuto-y"));
     player.setX(positionX);
     player.setY(positionY);
   }
@@ -357,11 +308,10 @@ function create() {
 
 function update() {
   // Bg move
-  this.bg.tilePositionX -= 0.2;
-  this.bg.tilePositionY -= 0.1;
+  this.bg.tilePositionX += 0.6;
+  this.bg.tilePositionY -= 0.6;
   //saw
-  this.Saw.setVelocityY(speed);
-  this.Saw.setX(300);
+
   let controls = localStorage.getItem("gamekey");
   let space = localStorage.getItem("spacebar");
   // Player movement
@@ -387,7 +337,7 @@ function update() {
     if (cursors.up.isDown && player.body.touching.down) {
       player.setVelocityY(-270);
     }
-  } else {
+  } else if (controls == "wad") {
     if (keyA.isDown) {
       player.setVelocityX(-160);
       player.anims.play("left", true);
@@ -415,15 +365,22 @@ function update() {
   }
 
   if (keyR.isDown) {
-    score = 0;
-    if (localStorage.getItem("x") != null && localStorage.getItem("x") != 20) {
-      localStorage.setItem("x", 20);
+    if (
+      localStorage.getItem("tuto-x") != null &&
+      localStorage.getItem("tuto-x") != 20
+    ) {
+      localStorage.setItem("tuto-x", 20);
     }
-    if (localStorage.getItem("y") != null && localStorage.getItem("y") != 380) {
-      localStorage.setItem("y", 550);
+    if (
+      localStorage.getItem("tuto-y") != null &&
+      localStorage.getItem("tuto-y") != 380
+    ) {
+      localStorage.setItem("tuto-y", 550);
     }
-    localStorage.setItem("morti", morti);
-    if (localStorage.getItem("x") == 20 && localStorage.getItem("y") == 380) {
+    if (
+      localStorage.getItem("tuto-x") == 20 &&
+      localStorage.getItem("tuto-y") == 380
+    ) {
       player.setX(20);
       player.setY(380);
     } else {
@@ -437,11 +394,12 @@ function update() {
 }
 
 function hitspike(player, spikes) {
-  score = 0;
   morti++;
   localStorage.setItem("morti", morti);
-  localStorage.setItem("morti", morti);
-  if (localStorage.getItem("x") == 20 && localStorage.getItem("y") == 380) {
+  if (
+    localStorage.getItem("tuto-x") == 20 &&
+    localStorage.getItem("tuto-y") == 380
+  ) {
     player.setX(20);
     player.setY(380);
   } else {
@@ -461,15 +419,15 @@ function hittrampolino(player, fan) {
   this.trampolino.play("trampolino", this);
   player.setVelocityY(-400);
 }
-function collect(player, apple) {
-  apple.disableBody(true, true);
+function collect(player, cherries) {
+  cherries.disableBody(true, true);
 
   //  Add and update the score
-  score += 10;
-  scoreText.setText("Score: " + score);
+  // score += 10;
+  // scoreText.setText("Score: " + score);
 }
-function removecollect(spike, apple) {
-  apple.disableBody(true, true);
+function removecollect(spike, cherries) {
+  cherries.disableBody(true, true);
 }
 function nextlvl() {
   if (cheat == "on") {
@@ -481,7 +439,7 @@ function nextlvl() {
 function checkpointsave() {
   if (cheat == "on") {
   } else {
-    localStorage.setItem("x", 20);
-    localStorage.setItem("y", 380);
+    localStorage.setItem("tuto-x", 20);
+    localStorage.setItem("tuto-y", 380);
   }
 }

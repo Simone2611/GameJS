@@ -47,6 +47,27 @@ idk how to call it so for now is simogame
 - faster respawn (it does not load everything another time when u die)
 - other fix
 
+<span style="color: #7F3FE0; ">-v 1.4</span>
+
+- fix
+- Level added:
+  - tutorial
+  - level 1
+  - level 2
+  - level 3
+  - level 4
+  - level 5 (old level 1)
+  - level 6 (old level 2 still work in progress)
+- bug fix
+- dash added (level 3 introduce dash)
+- every 3 level the theme change
+- GUI fix
+- removed score (it was useless)
+- first level (tutorial) added skip tutorial button
+- key added
+- lock added
+- Dash "recharge" added
+
 ---
 
 - npx parcel index.html level1.html
