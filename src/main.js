@@ -21,6 +21,7 @@ import checkpoint from "../assets/Free/Items/Checkpoints/Checkpoint/checkpoint.p
 var tutorial1;
 var tutorial2;
 var tutorial3;
+var tutorial4;
 var player;
 var speed2 = -50;
 var speed3 = 50;
