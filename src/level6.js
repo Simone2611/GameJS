@@ -176,6 +176,8 @@ function create() {
   }
 
   spikes.create(400, 470, "spike");
+  spikes.create(600, 490, "spike");
+  spikes.create(700, 490, "spike");
   // Spikedball
 
   spikes.create(600, 560, "Spikedball").setCircle(12);
