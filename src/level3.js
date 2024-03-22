@@ -248,6 +248,7 @@ function create() {
     callback: () => {
       this.apple.create(350, 550, "apple");
       this.apple.create(550, 440, "apple");
+      this.apple.create(220, 250, "apple");
     },
     loop: true,
   });
