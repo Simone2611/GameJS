@@ -78,6 +78,6 @@ idk how to call it so for now is simogame
 
 ---
 
-- npx parcel index.html level1.html
+- npx parcel build index.html level1.html level2.html level3.html level4.html level5.html level6.html level7.html
 
 ---
