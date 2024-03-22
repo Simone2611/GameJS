@@ -22,6 +22,7 @@ import key from "../assets/Free/key/02.png";
 import lock from "../assets/Free/key/05.png";
 import dashrefill from "../assets/Free/key/18.png";
 import blockEnemy from "../assets/Free/Traps/rockhead/Idle.png";
+var dash;
 var tuto;
 var checkpointOn = false;
 if (localStorage.getItem("x-4") == 790 && localStorage.getItem("y-4") == 480) {
