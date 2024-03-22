@@ -27,6 +27,12 @@ if (localStorage.getItem("x-3") == 790 && localStorage.getItem("y-3") == 480) {
   checkpointOn = true;
   count = 50;
 }
+if (localStorage.getItem("y-3") == null) {
+  localStorage.setItem("y-3", 550);
+}
+if (localStorage.getItem("x-3") == null) {
+  localStorage.setItem("x-3", 20);
+}
 var tuto2;
 var spikelockY = 377;
 var player;

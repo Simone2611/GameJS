@@ -19,6 +19,8 @@ import checkpoint from "../assets/Free/Items/Checkpoints/Checkpoint/checkpoint.p
 var player;
 var platforms;
 var Deaths;
+var count = 0;
+var dash;
 var cheat = "";
 var spikes;
 var fps;
@@ -331,6 +333,12 @@ function create() {
   });
 
   Deaths = this.add.text(680, 16, morti + " Deaths", {
+    fontSize: "1.2rem",
+    fill: "#000",
+    fontFamily: "Arial",
+  });
+
+  dash = this.add.text(570, 16, count + "% Dash", {
     fontSize: "1.2rem",
     fill: "#000",
     fontFamily: "Arial",

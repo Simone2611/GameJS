@@ -68,6 +68,14 @@ idk how to call it so for now is simogame
 - lock added
 - Dash "recharge" added
 
+<span style="color: #7F3FE0; ">-v 1.4.1</span>
+
+- level 6 done
+  - saw fixed
+  - finished gameplay
+- bugfix
+- vercel fix
+
 ---
 
 - npx parcel index.html level1.html

@@ -18,6 +18,12 @@ import strawberry from "../assets/Free/Items/Fruits/Strawberry.png";
 import end from "../assets/Free/Items/Checkpoints/End/End.png";
 import checkpoint from "../assets/Free/Items/Checkpoints/Checkpoint/checkpoint.png";
 var player;
+var dash;
+var checkpointOn = false;
+if (localStorage.getItem("x-6") == 20 && localStorage.getItem("y-6") == 380) {
+  checkpointOn = true;
+  count = 20;
+}
 var speed2 = -50;
 var speed3 = 50;
 var cheat = "";
@@ -39,6 +45,7 @@ var fps;
 var cursors;
 var speed = -100;
 var score = 0;
+var count = 0;
 var scoreText;
 var keyA;
 var keyD;
@@ -153,7 +160,9 @@ function create() {
   for (let i = 0; i < 150; i += 40) {
     platforms.create(i, 430, "ground");
   }
-
+  for (let i = 550; i < 850; i += 40) {
+    platforms.create(i, 350, "ground");
+  }
   // spike
   spikes = this.physics.add.staticGroup();
 
@@ -167,7 +176,6 @@ function create() {
 
   spikes.create(400, 470, "spike");
   // Spikedball
-  spikes.create(55, 520, "Spikedball").setCircle(15).refreshBody();
 
   spikes.create(600, 500, "Spikedball").setCircle(12);
 
@@ -183,14 +191,18 @@ function create() {
 
   spikes.create(30, 330, "Spikedball").setCircle(10).refreshBody();
 
+  spikes.create(690, 320, "Spikedball").setCircle(10).refreshBody();
+  spikes.create(690, 290, "Spikedball").setCircle(10).refreshBody();
+
   //slab
   platforms.create(600, 500, "slab");
   platforms.create(700, 500, "slab");
   platforms.create(500, 480, "slab");
   platforms.create(400, 480, "slab");
-
+  platforms.create(20, 320, "slab");
   //blocchi
   platforms.create(300, 450, "block2");
+
   //player Creation - Animation
   player = this.physics.add.sprite(20, 550, "idle");
   player.setSize(15, 27, true);
@@ -250,6 +262,7 @@ function create() {
   this.strawberry.create(750, 500, "strawberry");
   this.strawberry.create(200, 400, "strawberry");
   this.strawberry.create(60, 330, "strawberry");
+  this.strawberry.create(360, 330, "strawberry");
   this.time.addEvent({
     delay: 3000,
     callback: () => {
@@ -258,6 +271,7 @@ function create() {
       this.strawberry.create(750, 500, "strawberry");
       this.strawberry.create(200, 400, "strawberry");
       this.strawberry.create(60, 330, "strawberry");
+      this.strawberry.create(360, 330, "strawberry");
     },
     loop: true,
   });
@@ -266,7 +280,7 @@ function create() {
   this.physics.add.overlap(player, this.strawberry, collect, null, this);
   // END
   this.end = this.physics.add.staticGroup();
-  this.end.create(9, 78, "end").setScale(0.5).refreshBody().setSize(20, 30);
+  this.end.create(780, 313, "end").setScale(0.5).refreshBody().setSize(20, 30);
   this.physics.add.overlap(player, this.end, nextlvl, null, this);
   // Checkpoint
   this.checkpoint = this.physics.add
@@ -319,11 +333,17 @@ function create() {
     fontFamily: "Arial",
   });
 
+  dash = this.add.text(570, 16, count + "% Dash", {
+    fontSize: "1.2rem",
+    fill: "#000",
+    fontFamily: "Arial",
+  });
   // WASD
   keyA = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
   keyR = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.R);
   keyD = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
   keyW = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
+  keyZ = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Z);
   keySpace = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
   keyEsc = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ESC);
   if (
@@ -337,6 +357,11 @@ function create() {
     player.setX(positionX);
     player.setY(positionY);
   }
+  if (checkpointOn == true) {
+    count = 20;
+  } else {
+    count = 0;
+  }
 }
 
 function update() {
@@ -348,11 +373,12 @@ function update() {
   this.spike2.setVelocityX(speed3);
   this.spike2.setVelocityY(-10);
   this.Saw.setVelocityY(speed);
-  this.Saw.setX(300);
+  this.Saw.setX(700);
   let controls = localStorage.getItem("gamekey");
   let space = localStorage.getItem("spacebar");
   // Player movement
   this.checkpoint.anims.play("flag", true);
+  player.setSize(15, 27);
   if (controls == "arrow") {
     if (cursors.left.isDown) {
       player.setVelocityX(-160);
@@ -374,6 +400,23 @@ function update() {
     if (cursors.up.isDown && player.body.touching.down) {
       player.setVelocityY(-270);
     }
+    // dash
+    if (player.body.touching.down) {
+    } else {
+      if (count != 0 || count == null || count < 0) {
+        if (keyZ.isDown && cursors.left.isDown) {
+          player.setVelocityX(-1000);
+          player.setSize(24, 10);
+          player.anims.play("left", true);
+          count -= 1;
+        } else if (keyZ.isDown) {
+          player.setVelocityX(1000);
+          player.setSize(24, 10);
+          player.anims.play("right", true);
+          count -= 1;
+        }
+      }
+    }
   } else if (controls == "wad") {
     if (keyA.isDown) {
       player.setVelocityX(-160);
@@ -394,6 +437,23 @@ function update() {
     if (keyW.isDown && player.body.touching.down) {
       player.setVelocityY(-270);
     }
+    // dash
+    if (player.body.touching.down) {
+    } else {
+      if (count != 0 || count == null || count < 0) {
+        if (keyZ.isDown && keyA.isDown) {
+          player.setVelocityX(-500);
+          player.setSize(24, 10);
+          player.anims.play("left", true);
+          count -= 1;
+        } else if (keyZ.isDown) {
+          player.setVelocityX(500);
+          player.setSize(24, 10);
+          player.anims.play("right", true);
+          count -= 1;
+        }
+      }
+    }
   }
   if (space == "on") {
     if (keySpace.isDown && player.body.touching.down) {
@@ -402,6 +462,11 @@ function update() {
   }
 
   if (keyR.isDown) {
+    if (checkpointOn == true) {
+      count = 20;
+    } else {
+      count = 0;
+    }
     score = 0;
     if (
       localStorage.getItem("x-6") != null &&
@@ -429,9 +494,15 @@ function update() {
 
   fps.setText(Math.round(game.loop.actualFps) + " FPS");
   Deaths.setText(morti + " Deaths");
+  dash.setText(count + "% Dash");
 }
 
 function hitspike(player, spikes) {
+  if (checkpointOn == true) {
+    count = 20;
+  } else {
+    count = 0;
+  }
   morti++;
   localStorage.setItem("morti", morti);
   if (localStorage.getItem("x-6") == 20 && localStorage.getItem("y-6") == 380) {

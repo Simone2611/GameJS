@@ -30,7 +30,12 @@ var Deaths;
 if (localStorage.getItem("morti") == null) {
   localStorage.setItem("morti", 0);
 }
-
+if (localStorage.getItem("y-2") == null) {
+  localStorage.setItem("y-2", 550);
+}
+if (localStorage.getItem("x-2") == null) {
+  localStorage.setItem("x-2", 20);
+}
 var morti = localStorage.getItem("morti");
 var spikes;
 var fps;
