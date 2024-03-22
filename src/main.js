@@ -15,7 +15,7 @@ import Spikedball from "../assets/Free/Traps/SpikedBall/SpikedBall.png";
 import trampolino from "../assets/Free/Traps/Trampoline/trampolino.png";
 import hitbox from "../assets/hitbox.png";
 import trampolinoIdle from "../assets/Free/Traps/Trampoline/trampidle.png";
-import cherries from "../assets/Free/Items/Fruits/cherries.png";
+import cherries from "../assets/Free/Items/Fruits/Cherries.png";
 import end from "../assets/Free/Items/Checkpoints/End/End.png";
 import checkpoint from "../assets/Free/Items/Checkpoints/Checkpoint/checkpoint.png";
 var tutorial1;
