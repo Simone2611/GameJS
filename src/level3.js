@@ -20,6 +20,7 @@ import hitbox from "../assets/hitbox.png";
 import key from "../assets/Free/key/02.png";
 import lock from "../assets/Free/key/05.png";
 import dashrefill from "../assets/Free/key/18.png";
+
 var tuto;
 var checkpointOn = false;
 if (localStorage.getItem("x-3") == 790 && localStorage.getItem("y-3") == 480) {
