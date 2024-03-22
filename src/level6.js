@@ -178,7 +178,7 @@ function create() {
   spikes.create(400, 470, "spike");
   // Spikedball
 
-  spikes.create(600, 500, "Spikedball").setCircle(12);
+  spikes.create(600, 560, "Spikedball").setCircle(12);
 
   spikes.create(500, 480, "Spikedball").setCircle(12);
 
@@ -299,10 +299,10 @@ function create() {
   this.physics.add.overlap(player, this.checkpoint, checkpointsave, null, this);
   // trampolino
 
-  this.trampolino = this.physics.add.staticSprite(600, 567, "tramp");
-  // this.trampolino = this.physics.add.staticSprite(220, 300, "fan2");
-  this.physics.add.collider(platforms, this.trampolino);
-  this.physics.add.collider(player, this.trampolino, hittrampolino, null, this);
+  // this.trampolino = this.physics.add.staticSprite(600, 567, "tramp");
+  // // this.trampolino = this.physics.add.staticSprite(220, 300, "fan2");
+  // this.physics.add.collider(platforms, this.trampolino);
+  // this.physics.add.collider(player, this.trampolino, hittrampolino, null, this);
   // Saw
 
   this.Saw = this.physics.add.sprite(700, 550, "Saw").setSize(20, 22);
