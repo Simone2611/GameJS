@@ -1,6 +1,6 @@
 global.Phaser = require("phaser");
 
-import bg from "../assets/Free/Background/green.png";
+import bg from "../assets/Free/Background/Green.png";
 import idle from "../assets/Free/personaggi/frog/idle.png";
 import run from "../assets/Free/personaggi/frog/run.png";
 import runl from "../assets/Free/personaggi/frog/runleft.png";
