@@ -51,6 +51,7 @@ var keyA;
 var keyD;
 var keyW;
 var keyR;
+var keyZ;
 var keySpace;
 var keyEsc;
 var config = {
