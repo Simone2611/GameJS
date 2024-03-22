@@ -298,9 +298,9 @@ function create() {
   this.physics.add.collider(platforms, this.blockEnemy);
 
   this.hitbox2 = this.physics.add.staticGroup();
-  this.hitbox2.create(550, 220, "hitbox2");
-  this.hitbox2.create(550, 450, "hitbox2");
-  this.hitbox2.create(550, 400, "hitbox2");
+  this.hitbox2.create(550, 220, "hitbox2").setVisible(false);
+  this.hitbox2.create(550, 450, "hitbox2").setVisible(false);
+  this.hitbox2.create(550, 400, "hitbox2").setVisible(false);
   this.physics.add.collider(player, this.blockEnemy, hitspike, null, this);
   this.physics.add.overlap(player, this.hitbox2, godown, null, this);
   this.physics.add.collider(this.hitbox2, this.blockEnemy);
