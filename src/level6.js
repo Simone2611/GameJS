@@ -550,5 +550,6 @@ function checkpointsave() {
   } else {
     localStorage.setItem("x-6", 20);
     localStorage.setItem("y-6", 380);
+    checkpointOn = true;
   }
 }
