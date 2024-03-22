@@ -56,12 +56,14 @@ var speed = -60;
 var score = 0;
 var scoreText;
 var keyA;
+var hitboxX = 550;
 var keyD;
 var keyW;
 var keyZ;
 var keyR;
 var keySpace;
 var keyEsc;
+var i = 0;
 var config = {
   type: Phaser.AUTO,
   width: 800,
@@ -166,23 +168,39 @@ function create() {
 
   // spike
   spikes = this.physics.add.staticGroup();
-  spikes.create(200, 257, "spike");
+
   for (let i = 100; i < 750; i += 55) {
     spikes.create(i, 577, "spike");
   }
   spikes.create(349, 577, "spike");
+  spikes.create(470, 476, "spike");
+  spikes.create(375, 476, "spike");
+  spikes.create(390, 340, "spike");
+  spikes.create(410, 340, "spike");
+  spikes.create(353, 476, "spike");
+  spikes.create(330, 476, "spike");
+
+  spikes.create(205, 476, "spike");
+  spikes.create(253, 476, "spike");
+  spikes.create(230, 476, "spike");
   // spikeball
 
-  spikes.create(350, 480, "Spikedball").setCircle(15).refreshBody();
-
+  spikes.create(405, 420, "Spikedball").setCircle(15).refreshBody();
+  spikes.create(450, 420, "Spikedball").setCircle(15).refreshBody();
+  spikes
+    .create(405, 380, "Spikedball")
+    .setCircle(15)
+    .setScale(0.8)
+    .refreshBody();
+  spikes.create(300, 420, "Spikedball").setCircle(15).refreshBody();
+  spikes.create(180, 420, "Spikedball").setCircle(15).refreshBody();
   //slab
   platforms.create(800, 510, "slab");
-  platforms.create(20, 320, "slab");
 
-  platforms.create(300, 380, "slab");
+  platforms.create(400, 350, "slab");
   //blocchi
-  platforms.create(500, 440, "block2");
-  platforms.create(450, 400, "block2");
+  platforms.create(500, 460, "block2");
+  platforms.create(500, 420, "block2");
 
   //player Creation - Animation
   player = this.physics.add.sprite(20, 550, "idle");
@@ -212,7 +230,7 @@ function create() {
 
   this.anims.create({
     key: "fall",
-    frames: this.anims.generateFrameNumbers("fall", { start: 0, end: 11 }),
+    frames: this.anims.generateFrameNumbers("fall", { start: 0, end: 1 }),
     frameRate: 10,
     repeat: -1,
   });
@@ -227,7 +245,7 @@ function create() {
 
   this.apple.create(360, 550, "apple");
   this.apple.create(750, 550, "apple");
-  this.apple.create(220, 250, "apple");
+
   this.time.addEvent({
     delay: 3000,
     callback: () => {
@@ -252,7 +270,7 @@ function create() {
   //   this.physics.add.overlap(player, this.refill, dashadd, null, this);
   // END
   this.end = this.physics.add.staticGroup();
-  this.end.create(780, 245, "end").setScale(0.5).refreshBody().setSize(20, 30);
+  this.end.create(20, 463, "end").setScale(0.5).refreshBody().setSize(20, 30);
   this.physics.add.overlap(player, this.end, nextlvl, null, this);
   // Checkpoint
   this.checkpoint = this.physics.add
@@ -298,12 +316,16 @@ function create() {
   this.physics.add.collider(platforms, this.blockEnemy);
 
   this.hitbox2 = this.physics.add.staticGroup();
-  this.hitbox2.create(550, 220, "hitbox2").setVisible(false);
-  this.hitbox2.create(550, 450, "hitbox2").setVisible(false);
-  this.hitbox2.create(550, 400, "hitbox2").setVisible(false);
+  this.hitbox = this.physics.add.sprite(550, 220, "hitbox2").setVisible(false);
+
+  this.hitbox2.create(550, 430, "hitbox").setSize(20, 60).setVisible(false);
+  // this.hitbox2.create(550, 400, "hitbox2").setVisible(false);
   this.physics.add.collider(player, this.blockEnemy, hitspike, null, this);
   this.physics.add.overlap(player, this.hitbox2, godown, null, this);
-  this.physics.add.collider(this.hitbox2, this.blockEnemy);
+  this.physics.add.collider(platforms, this.blockEnemy, goup, null, this);
+  this.physics.add.collider(this.blockEnemy, this.hitbox, () => {
+    speed2 = -10;
+  });
   //score
 
   fps = this.add.text(20, 16, Math.round(game.loop.actualFps) + " FPS", {
@@ -354,6 +376,10 @@ function update() {
   this.Saw.setY(550);
   this.Saw.setVelocityY(0.00001);
   // blockenemy
+  this.hitbox.setX(hitboxX);
+
+  this.hitbox.setY(220);
+  this.hitbox.setVelocityY(0.0000001);
 
   this.blockEnemy.setX(550);
   this.blockEnemy.setVelocityY(speed2);
@@ -475,6 +501,14 @@ function update() {
       player.setX(20);
       player.setY(550);
     }
+    this.Saw.setX(-30);
+    hitboxX = 550;
+    this.blockEnemy.setY(200);
+  }
+
+  if (i == 1) {
+    hitboxX = 550;
+    i = 0;
   }
 
   fps.setText(Math.round(game.loop.actualFps) + " FPS");
@@ -488,7 +522,7 @@ function hitspike(player, spikes) {
   } else {
     count = 0;
   }
-  this.Saw.setX(-30);
+
   speed2 = 0;
   morti++;
   localStorage.setItem("morti", morti);
@@ -502,6 +536,9 @@ function hitspike(player, spikes) {
     player.setX(20);
     player.setY(550);
   }
+  this.Saw.setX(-30);
+
+  this.blockEnemy.setY(180);
 }
 
 function hittrampolino(player, fan) {
@@ -528,7 +565,7 @@ function removecollect(spike, apple) {
 function nextlvl() {
   if (cheat == "on") {
   } else {
-    window.location.href = window.location.origin + "/level4.html";
+    window.location.href = window.location.origin + "/level5.html";
   }
 }
 function checkpointsave() {
@@ -547,6 +584,12 @@ function dashadd(player, refill) {
 }
 
 function godown(player, hitbox) {
-  speed2 = 2000;
-  hitbox.setX(-200);
+  speed2 = 1000;
+  hitboxX = 20;
+  i = 1;
+}
+function goup() {
+  speed2 = -200;
+
+  i = 0;
 }
