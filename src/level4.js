@@ -74,6 +74,7 @@ var config = {
     arcade: {
       gravity: { y: 600 },
       debug: false,
+      fps: 60,
     },
   },
 
